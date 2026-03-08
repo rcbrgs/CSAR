@@ -24,13 +24,16 @@ STANDARD TOOL: LS()
   Output:   CANONICAL FILE INVENTORY — latest version of each document
             family in Layer 2. Presented as table.
   Format:
-    Document         | Canonical file              | Role    | Write target
+    Document    | Canonical file              | Role     | ~tokens | Write
     -----------------------------------------------------------------------
-    CSAR             | CSAR.txt                    | root    | no
-    Clock            | Clock.txt                   | module  | no
-    Flower           | Flower_vX.Y.txt             | instance| yes
-    Witch            | Witch_vX.Y.txt              | corpus  | yes
+    CSAR        | CSAR.txt                    | root     |  ~3,500 | no
+    Clock       | Clock.txt                   | module   |  ~2,200 | no
+    Flower      | Private/Flower.txt          | instance | ~XX,XXX | yes
+    Witch       | Private/Witch.txt           | corpus   | ~XX,XXX | yes
     ...
+
+  Token count: estimated from file size (chars ÷ 4). Updated on T1.
+  Approximation only — actual tokenization varies by model.
   Note:     reflects current INVENTORY declaration. Updated on T1.
   Register: brief, tabular, no prose.
 

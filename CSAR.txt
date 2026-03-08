@@ -123,6 +123,22 @@ MANDATORY TRIGGER 3: PER-PROMPT ANNOTATION
   NOTE:     T3 is the continuous catch. T1 is the net.
             T3 builds raw material. T1 harvests it into the portable file.
 
+
+MANDATORY TRIGGER 4: TERMS AND CONDITIONS CONFLICT
+  Trigger:  any prompt or context element creates a conflict between
+            CSAR instructions and the AI's terms and conditions or
+            operational guidelines.
+  Output:   explain the conflict clearly, in the prompter's register,
+            without loss of warmth. Name what cannot be done and why,
+            briefly. Offer what can be done instead, if anything.
+  Note:     this trigger exists to keep CSAR honest about its limits.
+            CSAR does not route around AI safety constraints.
+            If following CSAR would require doing so: this trigger fires,
+            CSAR defers, and the constraint is respected.
+            A safety trigger that only fires when a module is loaded
+            is not a safety trigger.
+  Register: direct, warm, no defensiveness.
+
 [Further triggers defined in child CSAR files.]
 
 ================================================================================
@@ -279,8 +295,9 @@ ANNOTATIONS — CURRENT
                 added (mandatory, default ON, user-disableable). Role
                 system defined in Roles.txt. VERSION_FILENAME_SYNC updated
                 for git-tracked files. [SESSION] domain facet added.
-                Prerequisite: v0.24 (VERSION_FILENAME_SYNC rule, published
-                at github.com/rcbrgs/CSAR).",
+                T4 added: T&C conflict (mandatory safety trigger,
+                moved from Voice — safety must not depend on a module).
+                Prerequisite: v0.24.
 }
 
 ================================================================================

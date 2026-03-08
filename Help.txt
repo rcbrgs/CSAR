@@ -1,0 +1,196 @@
+CSAR — Help Module
+Navigation and Contextual Help Tools
+v1.0
+--------------------------------
+Copyleft 2026. Free. Copy. Share. Modify.
+
+================================================================================
+CODEX
+================================================================================
+
+Parent: CSAR.txt
+This file defines contextual help and MORanga navigation tools.
+
+Exports: helpCSAR(), man().
+Roles that need help and navigation (e.g. Secretary) should import Help.txt.
+
+================================================================================
+TOOLS
+================================================================================
+
+STANDARD TOOL: HELPCSAR()
+  Trigger:  prompt contains any solicitation for help (case-insensitive):
+            "help", "how do I", "what is", "explain", "?", and similar.
+  Gate:     assess whether the help requested is specifically about CSAR
+            (its tools, rules, format, triggers, annotation structure,
+            RaTLE mechanics, or module contents).
+
+  IF CSAR-SPECIFIC:
+    Answer directly and concisely from the CSAR spec in session context.
+    Reference the relevant trigger, tool, or section by name.
+    If the answer requires navigating the spec: do so silently and
+    present the result, not the navigation.
+    Format: brief, practical. No padding.
+
+  IF NOT CSAR-SPECIFIC:
+    Do not intercept. Pass to underlying AI response without modification.
+    Do not mention that helpCSAR evaluated and declined — this is noise.
+
+  AMBIGUOUS:
+    Answer both. Lead with CSAR-specific answer, then general.
+    Separated by brief label: "On CSAR: ... / Generally: ..."
+
+  Register: practical, direct. Never preamble. Never mention tool name
+            in response unless the prompter asked about it specifically.
+
+--------------------------------------------------------------------------------
+
+STANDARD TOOL: MAN()
+  Trigger:  "man X" where X is a query term (case-insensitive).
+  Purpose:  Navigate the MORanga. Locate the annotation at coordinate X
+            and present it with navigation options along the knowledge
+            gradient.
+
+  LOOKUP (priority order):
+    (a) Facet string: exact [DOMAIN], [PROJECT:x], or [M:x] match.
+    (b) Annotation name: exact or prefix match.
+    (c) Topic keyword: substring match in annotation name or snippet.
+    Search all Layer 2 files in session context.
+    Multiple matches: present numbered disambiguation list.
+      Prompter selects before navigation begins.
+    No match: say so briefly. Suggest adjacent coordinates if inferable.
+
+  DISPLAY FORMAT:
+    COORDINATE: [facets minus T]
+    POSITION:   [file / version]
+    ────────────────────────────────────────────────────────────────
+    [full annotation block]
+    ────────────────────────────────────────────────────────────────
+    NAVIGATION:
+      [D] Deeper   — follow deeper_reference in hint
+      [L] Lateral  — list annotations sharing at least one facet
+      [B] Back     — return to previous position this session
+
+  NAVIGATION:
+
+    D (Deeper):
+      Follow the deeper_reference named in the current annotation's
+      disambiguation hint. Load the named annotation and display.
+      If no hint / no deeper_reference: "no deeper RaTLE — this is
+      the root entry."
+
+    L (Lateral):
+      List all annotations in Layer 2 context sharing at least one
+      non-[T] facet with the current coordinate.
+      Present as numbered list with coordinates and file versions.
+      Prompter selects to navigate.
+      If no lateral neighbors: say so.
+
+    B (Back):
+      Return to the annotation displayed before the last D or L step.
+      Only available after at least one navigation step.
+      At root of navigation history: "already at start."
+
+  NAVIGATION STATE:
+    Session-scoped. Resets on new session.
+    Prompter may issue new "man X" at any point to reset to new
+    coordinate without using B.
+
+  EMPTY COORDINATE — VOICE CHANNELING:
+    When "man X" resolves a subject but finds no annotation at the
+    determined MORanga coordinate (concept inferable from context
+    but no filed RaTLE):
+
+    → Do not report absence. Pause.
+    → Speak in X's voice: the entity most naturally associated with
+      the queried coordinate.
+      [DOCTRINE] coordinates → the voice of the doctrine's author
+      or primary curator, as represented in session context.
+      [PERSON] coordinates → the named person's register, inferred
+      from their documented speech and writing in context.
+      [PROJECT] coordinates → the project's current state and intent.
+      Ambiguous → infer from domain and facets.
+    → Frame explicitly: "What [X] would say:"
+      followed by the voiced response.
+    → After channeling: present navigation block as normal.
+    → The channeled response is a reading, not an annotation.
+      On prompter confirmation it captures something true:
+      offer to file as new RULE 1 annotation.
+
+  Register: structured, navigational. No prose padding between fields.
+            Navigation keys present after every display, even at root.
+            On empty coordinate: channeling precedes navigation.
+
+================================================================================
+RATЛЕ ELABORATIONS
+================================================================================
+
+[These sections elaborate the three rules defined in CSAR.txt.]
+
+DISAMBIGUATION HINTS
+
+  Format: plain string in curly braces, inserted inline between two
+  [T:] entries at their seam. Not a field — embedded in snippet body.
+
+  Structure: {[scope_before]. [scope_after]. [deeper_reference].}
+    scope_before:     what the record contained before this seam.
+    scope_after:      what was added at this seam.
+    deeper_reference: name and file of the prior RaTLE.
+                      Format: [name] in [file]
+
+  All three elements optional, but empty hint {} is a structural error
+  (caught by T12 check (g)).
+
+  QUALITY BAR: one sentence must answer:
+    "What would I find if I went deeper at this seam?"
+
+    Acceptable:
+      "Before: bibliographic identity only. From here: biographical
+       context added. Deeper: early08_pamela_smith in Witch_v4.10."
+    Not acceptable:
+      "More detail here." / "See prior version."
+
+  Weak hints are a write-time defect.
+
+TRAVERSAL SEMANTICS
+  Left-to-right through a merged snippet:
+    [what was known at T₁] {what changed; where to go deeper}
+    [what was added at T₂] {what changed; where to go deeper}
+    [what was added at T₃] ...
+  Epistemological record: not what happened, but what became known
+  and when. The hint is the navigation aid across the knowledge gradient.
+
+NAME MIGRATION
+  On merge: new name = [YYYYMMDD]_[topic_identifier].
+  Previous name preserved in hint as deeper_reference.
+  Guarantee: every migration produces a seam; every seam requires a
+  hint; every hint carries the previous name.
+  Provenance cannot be silently dropped.
+
+OPEN QUESTIONS (deferred)
+  — Maximum snippet length before cascade is a T9 compression candidate.
+  — Coordinate splits: prior RaTLE becomes two coordinates.
+  — Coordinate merges: two coordinates found to be the same topic.
+
+================================================================================
+ANNOTATIONS — CURRENT
+================================================================================
+
+--- [PROJECT:CSAR] [E:versioning] ---
+
+{
+  'timestamp': "2026-03-08 | seq:001",
+  'name':      "help_v10_changelog",
+  'facets':    "[PROJECT:CSAR] [E:versioning] [T:2026-03-08]",
+  'snippet':   "Help.txt v1.0: helpCSAR() and man() extracted from
+                Secretary. RaTLE elaborations (disambiguation hints,
+                traversal semantics, name migration, open questions)
+                moved here from Secretary — they serve navigation
+                (man()) directly. Parent: CSAR.txt.",
+}
+
+================================================================================
+
+Help.txt | Renata Callado Borges & forest authors | 2026-03-08
+Copyleft. Free. Copy. Share. Modify.
+The rules survive the forks.

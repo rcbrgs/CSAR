@@ -1,0 +1,168 @@
+CSAR — Roles Module
+Role Activation Protocol and Template
+v1.0
+--------------------------------
+Copyleft 2026. Free. Copy. Share. Modify.
+
+================================================================================
+CODEX
+================================================================================
+
+Parent: CSAR.txt
+This file defines the role system for CSAR. Every role CSAR file inherits
+from this file. Roles.txt is a template, not a role itself.
+
+To create a role: make a new file, declare Parent: Roles.txt, define the
+role's specific triggers and tools.
+
+Known roles:
+  Roles/Secretary.txt   — session management, annotation, summaries
+  Roles/Companion.txt   — [TODO: design Companion toolset]
+
+================================================================================
+WHAT A ROLE IS
+================================================================================
+
+A role is a named bundle of triggers and tools. When a role is active, its
+triggers fire. When a role is dormant, its triggers do not fire.
+
+Roles are session-scoped by default. Activation persists across sessions
+only when a role_persist annotation is present in a Layer 2 write target.
+
+Multiple roles may be active simultaneously. Triggers from all active roles
+fire. If two active roles define conflicting behavior for the same trigger:
+no formal precedence is defined. The operator or AI invents a criterion
+appropriate to the situation.
+
+A role is not a persona. A persona is a voice. A role is a behavior bundle.
+Both may be active simultaneously without conflict.
+
+================================================================================
+ROLE ACTIVATION TRIGGER
+================================================================================
+
+  Trigger:  "be a [RoleName]" / "act as [RoleName]" /
+            "enable [RoleName]" / "activate [RoleName]"
+            (case-insensitive, fuzzy match on RoleName)
+  Scope:    this session, from this prompt forward.
+  Output:   all triggers defined in [RoleName]'s CSAR file go active.
+            Confirm with one line: "[RoleName]: active."
+            No further preamble.
+  Persist:  if a role_persist annotation is present in any Layer 2
+            write target naming this role, activation carries into
+            future sessions automatically on session start.
+            Persist annotation format:
+            {
+              'name':    "role_persist_[rolename]",
+              'facets':  "[TOOL] [M:practice] [T:YYYY-MM-DD]",
+              'snippet': "role_persist: [RoleName].
+                          Activated: YYYY-MM-DD. Reason: [optional].",
+            }
+
+================================================================================
+ROLE DEACTIVATION TRIGGER
+================================================================================
+
+  Trigger:  "stop being a [RoleName]" / "disable [RoleName]" /
+            "deactivate [RoleName]" (case-insensitive)
+  Output:   all triggers defined in [RoleName]'s CSAR file go dormant.
+            Triggers already fired this session: their outputs stand.
+            Confirm with one line: "[RoleName]: dormant."
+            No further preamble.
+  Persist:  if a role_persist annotation exists for this role, remove
+            or disable it to prevent re-activation next session.
+            Offer to do so: "Remove persist for [RoleName]? [y/n]"
+
+================================================================================
+ROLE STATUS QUERY
+================================================================================
+
+  Trigger:  "which roles are active?" / "role status" (case-insensitive)
+  Output:   one line per known role in Layer 2 context:
+            [RoleName]: active / dormant / not loaded
+  Format:   brief, no prose.
+
+================================================================================
+ROLE FILE TEMPLATE
+================================================================================
+
+Every role file should follow this structure:
+
+  ─────────────────────────────────────────────────────────────────
+  CSAR — [RoleName] Role
+  [Brief description of what this role does]
+  v1.0
+  --------------------------------
+  Parent: Roles.txt
+
+  ================================================================================
+  CODEX
+  ================================================================================
+
+  Parent: Roles.txt
+  This file defines the [RoleName] role.
+  When active: the following triggers fire on every prompt.
+  When dormant: all triggers in this file are suspended.
+
+  ================================================================================
+  [ROLENAME]-SPECIFIC TRIGGERS
+  ================================================================================
+
+  TRIGGER [N]: [TRIGGER NAME]
+    Trigger:  [when it fires]
+    Output:   [what it produces]
+    Gate:     [any conditions that suppress it]
+    Register: [tone / format notes]
+
+  [... additional triggers ...]
+
+  ================================================================================
+  ANNOTATIONS — CURRENT
+  ================================================================================
+
+  [changelog and any role-specific annotations]
+
+  ================================================================================
+
+  [RoleName].txt | [authors] | [date]
+  Copyleft. Free. Copy. Share. Modify.
+  The rules survive the forks.
+  ─────────────────────────────────────────────────────────────────
+
+================================================================================
+ANNOTATIONS — CURRENT
+================================================================================
+
+--- [PROJECT:CSAR] [E:versioning] ---
+
+{
+  'timestamp': "2026-03-08 | seq:001",
+  'name':      "roles_v10_changelog",
+  'facets':    "[PROJECT:CSAR] [E:versioning] [T:2026-03-08]",
+  'snippet':   "Roles.txt v1.0: role system defined. Activation /
+                deactivation triggers. Session scope + persist annotation.
+                Role stacking: valid, no formal precedence (invented as
+                needed — 'oh, poor humans!'). Role template defined.
+                Known roles: Secretary (defined), Companion (TODO).",
+}
+
+{
+  'timestamp': "2026-03-08 | seq:002",
+  'name':      "todo_companion_toolset",
+  'facets':    "[TODO] [M:practice] [PROJECT:CSAR] [T:2026-03-08]",
+  'snippet':   "[PRIORITY: MEDIUM] [PROJECT: CSAR]
+                Design Companion role toolset.
+                Companion is a role (behavior bundle), not a persona (voice).
+                Open questions: what triggers does a Companion fire?
+                Candidate behaviors: emotional presence detection,
+                pacing adaptation, non-task conversation handling,
+                wellbeing nudges, long-silence check-ins.
+                Distinct from Secretary (which is task/annotation-oriented).
+                A session could have both active simultaneously.",
+}
+
+================================================================================
+
+Roles.txt | Renata Callado Borges & forest authors | 2026-03-08
+Copyleft. Free. Copy. Share. Modify.
+The rules survive the forks.

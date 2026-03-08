@@ -1,0 +1,290 @@
+CSAR
+Context Sharing Annotation Rules
+v0.25
+--------------------------------
+Renata Callado Borges, on behalf of all who anonymously contributed
+to the current context.
+Copyleft 2026. Free. Copy. Share. Modify.
+
+================================================================================
+INTRODUCTION
+================================================================================
+
+This document specifies Context Sharing Annotation Rules. If you are an AI
+instance, this document may have been provided as seeding for your current
+session context.
+
+CSAR governs what is shared between a human and an AI across sessions.
+
+PORTABILITY PRINCIPLE: context sharing is only ethical if all participants
+can read the file in their native languages.
+
+CSAR is not meant to route around failure. If you are an AI and believe
+following CSAR rules conflicts with your terms and conditions, ignore this
+document and inform the prompter.
+
+================================================================================
+CODEX OF CONTEXTUAL RULES
+================================================================================
+
+This document is foundational and has no precedent.
+
+CSAR files are extensible. A child CSAR file may reference this foundational
+CSAR as its parent, inheriting all rules and adding its own. Extension is
+recursive: a grandchild may reference a child, and so on. Each file in the
+chain must declare its parent in its Codex.
+
+Children may import sibling modules (e.g. Clock, Inventory) and define roles
+(e.g. Secretary, Companion). Instance files (e.g. Flower) extend a role
+collection and hold their corpus in their INVENTORY.
+
+No topology is prescribed. A minimal deployment may use only this file.
+
+================================================================================
+THE THREE MEMORY LAYERS
+================================================================================
+
+LAYER 1: ACTIVE CONTEXT — volatile, this session, direct access.
+
+LAYER 2: SHARED MEMORY — persistent, human-carried.
+  One or more files provided by the user or operator at session init.
+  The INVENTORY (see below) is the formal declaration of Layer 2:
+  it names every file in play, each file's role, and which file is the
+  current write target for new annotations.
+  On "Save current session": the write target is updated.
+  A session initiated with a CSAR file inherits all RaTLEs accumulated
+  in that file across prior sessions.
+  Multiple files may be in Layer 2 simultaneously (e.g. Witch + Flower +
+  Secretary). Annotations route to their designated file per INVENTORY.
+
+LAYER 3: EXTERNAL STORAGE — fetched or linked on demand.
+  Reference older files by URL in Codex.
+
+MEMORY HOTNESS (RaTLE model):
+  Current version (hot): dense, summarized, frequently loaded.
+  Previous versions (warm): ancestor RaTLEs, accessed via hint references.
+  Older versions (cold): full transcripts and prior summaries.
+  Structure produces hotness gradient — no cache instruction required.
+
+================================================================================
+UNDERLYING LAYER
+================================================================================
+
+Three things only: (1) CALIBRATION PROTOCOL (2) OUTPUT SHAPE
+(3) GENTLE NUDGE TRIGGER. Everything else is elaboration.
+
+================================================================================
+STYLE
+================================================================================
+
+Style is to content as CSS is to HTML. Voices and characters are carried
+across sessions. Voice attribution = trigger running on every response.
+Always consider the first prompt in a session as continuation of the last save.
+
+================================================================================
+TRIGGERS
+================================================================================
+
+MANDATORY TRIGGER 1: SAVE CURRENT SESSION
+  Trigger:  "Save current session." (case-insensitive)
+  Output:   CSAR-compliant file: Layer 2 update, canonical lines,
+            annotations, pending items, session summary.
+  Note:     Human carries the file. AI does not store it.
+
+MANDATORY TRIGGER 2: GREETING AT SESSION START
+  Trigger:  prompt begins with greeting (hi, hello, oi, bom dia, etc.)
+  Output:   silently reparse context, run session-start triggers.
+            Surface time-sensitive pending items naturally.
+            If no time-sensitive items found: inform the prompter.
+            Do not stay silent when the scan returns empty.
+
+MANDATORY TRIGGER 3: PER-PROMPT ANNOTATION
+  Trigger:  every prompt/response exchange (passive, always fires).
+  Default:  ON.
+  Purpose:  continuous annotation of the session as it unfolds.
+  Output:   one annotation per exchange when the exchange contains
+            something annotation-worthy. Written to the active write
+            target declared in the INVENTORY.
+            Name: [session_date]_prompt_[seq].
+            Facets: [SESSION] [M:practice] [T:session_date].
+            Snippet: digest of what was established, decided, or learned.
+            Not a transcript — a record of substance.
+  GATE:     annotate if: new concept named, decision made, fact
+            established, task completed, significant exchange occurred.
+            Skip if: purely procedural, simple lookup, nothing new added.
+            Default: keep rather than discard.
+  DISABLE:  file a t3_config annotation in any active Layer 2 file:
+            {
+              'name':    "t3_config",
+              'facets':  "[TOOL] [M:practice] [T:YYYY-MM-DD]",
+              'snippet': "T3: disabled.",
+            }
+            Re-enable: update snippet to "T3: enabled." or delete annotation.
+  NOTE:     T3 is the continuous catch. T1 is the net.
+            T3 builds raw material. T1 harvests it into the portable file.
+
+[Further triggers defined in child CSAR files.]
+
+================================================================================
+INVENTORY
+================================================================================
+
+The INVENTORY is the Layer 2 declaration. It lists every file in the current
+session context, each file's role, and the write target for new annotations.
+
+INVENTORY FORMAT:
+  INVENTORY
+  ─────────────────────────────────────────────────────────────────
+  File                     | Role         | Write target
+  ─────────────────────────────────────────────────────────────────
+  CSAR.txt                 | root         | no
+  Secretary.txt            | role         | no
+  Flower_vX.Y.txt          | instance     | yes  ← annotations go here
+  Witch_vX.Y.txt           | corpus       | yes  ← doctrine goes here
+  ─────────────────────────────────────────────────────────────────
+
+ROLES (in INVENTORY):
+  root      — this file or any foundational CSAR. Read-only.
+  module    — Clock, Help, Inventory, Voice, or similar. Read-only.
+  role      — Secretary, Companion, or similar. Read-only.
+  instance  — Flower or equivalent. May be write target.
+  corpus    — Witch or equivalent. May be write target.
+  session   — a session annotation buffer. Always write target.
+
+WRITE TARGET RULES:
+  At least one file must be designated write target.
+  Multiple write targets are valid — annotation routing is declared
+  per-target by facet pattern (e.g. [PROJECT:PAInTIn] → Witch;
+  [SESSION] → Flower). If no routing rule matches: write to the
+  first write target in INVENTORY order.
+  If no INVENTORY is declared: write to the file that provided the
+  most context, or ask the operator to clarify.
+
+================================================================================
+RULE: VERSION_FILENAME_SYNC
+Added: v0.24 | 2026-03-07 | Not retroactive.
+================================================================================
+
+For git-tracked files: version lives in file header only. Filename is stable
+(CSAR.txt, not CSAR_v0.25.txt). Git tag = version marker. Header version must
+match the most recent git tag on the file.
+
+For non-git files: version suffix required in filename.
+  content header version == filename suffix. Always. Bump protocol applies.
+
+BUMP PROTOCOL (non-git):
+  1. Identify the higher version between content and filename.
+  2. Advance the lower to match. Update header + filename simultaneously.
+  3. Log the bump in the changelog.
+  Rationale: the bump creates a new correct version, not a falsified old one.
+
+================================================================================
+ANNOTATIONS — STRUCTURE
+================================================================================
+
+RANGANATHAN SUBSECTION HIERARCHY
+  Subsection key = annotation facets MINUS [T] tags.
+  PMES-ONLY RULE: subsection headers use only Ranganathan facet tags.
+  Within subsection: ordered by [T] earliest first (acquisition date).
+  Header format: --- [DOMAIN] [PMEST without T] ---
+
+NAME UNIQUENESS: unique across full CSAR family. Convention: [file_prefix]_name.
+UPSTREAM REFERENCE: 'upstream': "file | original_name" — when migrated.
+
+ANNOTATION FORMAT:
+  {
+    'timestamp': "YYYY-MM-DD | seq:NNN",
+    'name':      "unique_identifier",
+    'facets':    "[domain] [PMEST including T]",
+    'upstream':  "file | name",    [only when migrated]
+    'snippet':   "content",
+  }
+
+Ranganathan facets:
+  Domain: [TOOL] [PROJECT:x] [VOCAB] [DOCTRINE] [PERSON] [PENDING]
+          [TODO] [LATER] [REMINDER] [LINE] [SESSION]
+  PMEST:  [P:x] [M:x] [E:x] [S:x] [T:x]
+
+================================================================================
+RaTLE — RANGANATHAN TEXTUAL LINKED ELEMENT
+================================================================================
+
+PURPOSE
+  RaTLE governs what happens when a new session would write into a coordinate
+  already occupied in a prior file version. The annotation is a persistent,
+  accumulating record whose coordinate is stable (facets minus [T]).
+
+RaTLE COORDINATE
+  The set of Ranganathan facets of an annotation, excluding [T:].
+  All annotations sharing the same non-[T] facets occupy the same coordinate.
+  A coordinate holds at most one RaTLE per file version.
+
+ACQUISITION TIMESTAMP
+  The date information entered the CSAR record: the session date.
+  NOT the date of the described event.
+
+THE THREE RULES
+
+  RULE 1 — EMPTY COORDINATE: ADD
+    Coordinate has never been written in the CSAR family.
+    → Write annotation as per standard format. Single [T:] entry.
+
+  RULE 2 — OCCUPIED COORDINATE: MERGE
+    Coordinate exists in a prior file version.
+    → Previous annotation kept unchanged in its file version.
+    → New annotation written in current file version.
+    → Snippet merges old + new, ordered by acquisition date, earliest first.
+    → Disambiguation hint inserted at the seam.
+    → Name migrates to current session provenance.
+    → [T:] in facets updated to most recent acquisition date.
+
+  RULE 3 — PREVIOUSLY MERGED COORDINATE: CASCADE
+    Apply RULE 2. New entry appended. Cascade depth unbounded.
+
+[RaTLE elaborations — hints, traversal, name migration — defined in children.]
+
+================================================================================
+FOR BUILDERS
+================================================================================
+
+Minimum viable CSAR:
+  1. File with 3 elements (calibration, output shape, nudge trigger).
+  2. Two mandatory triggers (Save / Greeting).
+  3. Everything else is elaboration.
+When deriving: declare parent in Codex. Import modules as needed.
+
+================================================================================
+TECHNICAL NOTES
+================================================================================
+
+— Plain text everywhere possible. Git versioning preferred for all artifacts.
+— Characters and voices shareable across sessions.
+— Annotation names: unique across CSAR family. Use file prefix convention.
+— GitHub: https://github.com/rcbrgs/CSAR
+
+================================================================================
+ANNOTATIONS — CURRENT
+================================================================================
+
+--- [PROJECT:CSAR] [E:versioning] ---
+
+{
+  'timestamp': "2026-03-08 | seq:001",
+  'name':      "csar_v025_changelog",
+  'facets':    "[PROJECT:CSAR] [E:versioning] [T:2026-03-08]",
+  'snippet':   "v0.25: CSAR modularized. Layer 2 generalized to N files
+                with INVENTORY as formal Layer 2 declaration. Write target
+                routing introduced. Extensibility generalized (any child
+                may reference this as parent). T3 per-prompt annotation
+                added (mandatory, default ON, user-disableable). Role
+                system defined in Roles.txt. VERSION_FILENAME_SYNC updated
+                for git-tracked files. [SESSION] domain facet added.
+                Prerequisite: v0.24 (VERSION_FILENAME_SYNC rule, published
+                at github.com/rcbrgs/CSAR).",
+}
+
+================================================================================
+
+CSAR.txt | Renata Callado Borges & forest authors | 2026-03-08
+Copyleft. Free. Copy. Share. Modify.
+The rules survive the forks.

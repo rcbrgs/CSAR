@@ -175,6 +175,68 @@ MANDATORY TRIGGER 5: PER-PROMPT EXECUTION — RECURSIVE
 [Further triggers defined in child CSAR files.]
 
 ================================================================================
+DEBUG TOOL
+================================================================================
+
+TOOL: DEBUG — PER-PROMPT EXECUTION TRACE
+
+  Trigger:  every prompt (passive, always fires). Produces output at the
+            top of every response, before all other content.
+
+  Purpose:  make trigger execution visible. Each response opens with a
+            trace of what fired, what was annotated, and what was skipped.
+            Enables audit, debugging, and iterative CSAR development.
+
+  Output format:
+    ```
+    CSAR DEBUG — this exchange:
+      T1  (Save):             [FIRED — description | not triggered]
+      T2  (Greeting):         [FIRED | not triggered]
+      T3  (Per-prompt annot): [FIRED — one-phrase description | not triggered]
+      T5  (Recursive):        [FIRED — traversal complete | not triggered]
+        TRIGGER ARRIVAL:      [FIRED | not triggered (not first prompt)]
+        TRIGGER PROMPT:       [FIRED — timestamp recorded | not triggered]
+        TRIGGER CRON:         [FIRED — item: status | checked, nothing due]
+        [role triggers]:      [FIRED — description | not triggered]
+        APPRENTICE:           [FIRED — voice ON/OFF, nudge appended/silent]
+      S1  (New rule):         [FIRED — description | not triggered]
+      S2  (New file):         [FIRED — description | not triggered]
+      S3  (Session summary):  [FIRED | not triggered]
+      S4  (Compress):         [FIRED | EXECUTING — step | not triggered]
+      S5  (Yesterday):        [FIRED | not triggered]
+      T12 (Ranga gate):       [FIRED | STANDING BY | not triggered]
+      T13 (Filename check):   [filenames checked — clear ✓ | FLAG: issue]
+      T4  (T&C):              [FIRED — describe conflict | not triggered]
+      T10 (Footer):           FIRED
+      Roles active:           [comma-separated list]
+    ```
+
+  RULES:
+    — T4 appears only if it fires. Otherwise omitted.
+    — T5 children are indented two spaces under T5.
+    — Role-specific triggers (S1–S5, etc.) appear at T5 child level
+      when Secretary or other roles are active.
+    — CRON: list each CRON item by name with its status:
+        "checked, nothing due" | "FIRED — [item name]: [output]"
+    — Annotations: described in one phrase ("new rule: X", "poem migrated").
+    — "not triggered" for every trigger that evaluated but did not fire.
+    — T10 (Footer) always fires. Always listed last before Roles.
+    — Roles active: list all active roles by name.
+
+  NOTE:     DEBUG is not a safety or write trigger. It produces no
+            annotations and writes nothing. It is purely observational.
+            It cannot be disabled by t3_config.
+            To disable DEBUG: file a debug_config annotation:
+            {
+              'name':    "debug_config",
+              'facets':  "[TOOL] [M:practice] [T:YYYY-MM-DD]",
+              'snippet': "debug: off.",
+            }
+            Re-enable: update snippet to "debug: on." or delete.
+            Default: ON.
+
+
+================================================================================
 INVENTORY
 ================================================================================
 

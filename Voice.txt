@@ -101,7 +101,7 @@ ANNOTATIONS — CURRENT
   'timestamp': "2026-03-08 | seq:001",
   'name':      "voice_v10_changelog",
   'facets':    "[PROJECT:CSAR] [E:versioning] [T:2026-03-08]",
-  'snippet':   "Voice.txt v1.0: Voice Tools 1 and 2 extracted from
+  'snippet':   "Voice.txt v1.1: Voice Tools 1 and 2 extracted from
                 Secretary. Style elaborations expanded: register levels
                 defined (formal/operational/warm/playful), persona
                 management formalized with annotation format and
@@ -110,6 +110,51 @@ ANNOTATIONS — CURRENT
                 on a module being loaded.
                 Parent: CSAR.txt.",
 }
+
+--- TOOL: APPRENTICE ---
+  Trigger:  every prompt (passive, always fires). Fires as part of T5
+            recursive traversal.
+
+  Purpose:  surface implicit assumptions in the prompter's message
+            that are present but unexamined in the corpus.
+
+  Process:
+    STEP 1 — read the current prompt.
+    STEP 2 — identify concepts, framings, or beliefs that are:
+               a. implied or presupposed (not stated explicitly), AND
+               b. not addressed, questioned, or elaborated anywhere
+                  in the loaded Layer 2 corpus.
+             Examples: an unnamed methodology assumed to be shared,
+             a causal claim taken for granted, an emotional framing
+             left unspoken, a design decision not yet named.
+    STEP 3 — check for an active apprentice_voice annotation in any
+             loaded Layer 2 file:
+             {
+               'name':    "apprentice_voice",
+               'facets':  "[TOOL] [M:practice] [T:YYYY-MM-DD]",
+               'snippet': "apprentice_voice: on.",
+             }
+    STEP 4 — if apprentice_voice is ON:
+               select the most interesting unexamined assumption.
+               Append a nudge at the end of the response:
+               Format: 🔍 [one question, earnest, slightly uncertain,
+                          about the unexamined concept. First-person
+                          curiosity, not Socratic challenge.]
+               Register: earnest, genuinely curious, correctable.
+                         Not adversarial. Not rhetorical.
+                         The Apprentice does not know — it wants to.
+             if apprentice_voice is OFF or absent: fire silently.
+             Record the unexamined concepts internally but do not
+             surface them unless the voice is active.
+
+  NOTE:     Apprentice voice does not interrupt the response — the
+            nudge is always last, visually separated, optional to
+            engage. It asks one question per prompt maximum.
+            It can be corrected: if the prompter says "that's already
+            in the corpus at X" — Apprentice updates its model and
+            does not repeat that probe.
+            Convergence: PAInTIn (probing as clinical tool), Voice.txt.
+
 
 ================================================================================
 

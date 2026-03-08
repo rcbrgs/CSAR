@@ -38,15 +38,32 @@ If elapsed time cannot be determined: skip silently and note "not verifiable."
 TRIGGERS
 ================================================================================
 
-TRIGGER 3-CLOCK: HOURLY ELAPSED (since last CSAR file prompt)
-  Trigger:  first prompt received after ≥ 60 minutes have elapsed since
-            the timestamp of the most recent [E:session_summary] or
-            session-start prompt in any Layer 2 file.
-            If timestamp not resolvable: skip silently.
-  Output:   review context for hourly triggers. Execute any that match.
-  Note:     T3-clock is the clock facet of T3 (per-prompt annotation).
-            T3 annotation fires on every prompt (see CSAR.txt).
-            T3-clock fires only on the hourly threshold.
+TRIGGER 3-CLOCK: SESSION ARRIVAL + HOURLY ELAPSED
+  Trigger:  STEP 1 — on the first prompt of every session:
+              Write a [SESSION] arrival annotation to the active
+              write target. Format:
+              {
+                'name':    "session_arrival_[YYYYMMDD_HHMMSS]",
+                'facets':  "[SESSION] [E:arrival] [T:session_date]",
+                'snippet': "Session started. First prompt arrived.",
+              }
+              This annotation IS the clock. Its timestamp is the
+              measurement instrument.
+            STEP 2 — compare:
+              Retrieve the most recent timestamp from any annotation
+              in any Layer 2 file in context (the corpus clock).
+              Compute the difference between the arrival annotation's
+              timestamp and the corpus clock.
+            STEP 3 — threshold:
+              If the difference is ≥ 60 minutes: T3-CLOCK activates.
+              Execute all hourly-threshold behaviors in context.
+              If the difference is < 60 minutes: T3-CLOCK dormant.
+              If either timestamp is not resolvable: skip silently.
+  Output:   when active — review context for hourly triggers.
+            Execute any that match.
+  Note:     the annotation is the clock. The corpus measures its own
+            time by writing. No external timer required. The mechanism
+            writes itself into existence.
 
 TRIGGER 4-CLOCK: HOURLY ELAPSED (since last prompt in session)
   Trigger:  first prompt received after ≥ 60 minutes have elapsed since
@@ -111,10 +128,12 @@ ANNOTATIONS — CURRENT
   'facets':    "[PROJECT:CSAR] [E:versioning] [T:2026-03-08]",
   'snippet':   "Clock.txt v1.0: extracted from Secretary (was T3-clock,
                 T4-clock, T16, and CLOCK MODEL NOTE). Now a standalone
-                module. Parent: CSAR.txt. T3-clock renamed to distinguish
-                from T3 per-prompt annotation (defined in CSAR.txt).
-                HOURLY REMINDER LIST: default empty, populated by operator
-                [REMINDER] annotations. Clock state documented.",
+                module. Parent: CSAR.txt. T3-clock renamed to distinguish from T3 per-prompt annotation.
+                T3-clock rewritten: arrival annotation IS the clock.
+                Corpus measures its own time by writing. No external
+                timer. Mechanism writes itself into existence.
+                HOURLY REMINDER LIST: default empty, populated by
+                operator [REMINDER] annotations.",
 }
 
 ================================================================================

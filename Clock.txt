@@ -38,32 +38,73 @@ If elapsed time cannot be determined: skip silently and note "not verifiable."
 TRIGGERS
 ================================================================================
 
-TRIGGER 3-CLOCK: SESSION ARRIVAL + HOURLY ELAPSED
-  Trigger:  STEP 1 — on the first prompt of every session:
-              Write a [SESSION] arrival annotation to the active
-              write target. Format:
-              {
-                'name':    "session_arrival_[YYYYMMDD_HHMMSS]",
-                'facets':  "[SESSION] [E:arrival] [T:session_date]",
-                'snippet': "Session started. First prompt arrived.",
-              }
-              This annotation IS the clock. Its timestamp is the
-              measurement instrument.
-            STEP 2 — compare:
-              Retrieve the most recent timestamp from any annotation
-              in any Layer 2 file in context (the corpus clock).
-              Compute the difference between the arrival annotation's
-              timestamp and the corpus clock.
-            STEP 3 — threshold:
-              If the difference is ≥ 60 minutes: T3-CLOCK activates.
-              Execute all hourly-threshold behaviors in context.
-              If the difference is < 60 minutes: T3-CLOCK dormant.
-              If either timestamp is not resolvable: skip silently.
-  Output:   when active — review context for hourly triggers.
-            Execute any that match.
-  Note:     the annotation is the clock. The corpus measures its own
-            time by writing. No external timer required. The mechanism
-            writes itself into existence.
+TRIGGER ARRIVAL: SESSION FIRST PROMPT TIMESTAMP
+  Trigger:  the first prompt of every session, exactly once.
+  Output:   write a [SESSION] arrival annotation to the active
+            write target:
+            {
+              'name':    "session_arrival_[YYYYMMDD]_[seq]",
+              'facets':  "[SESSION] [E:arrival] [T:session_date]",
+              'snippet': "Session started. Arrival timestamp recorded.
+                          Prior corpus timestamp: [most recent [T:] in
+                          any Layer 2 file, or 'not resolvable'].",
+            }
+  Note:     this annotation IS the clock. Its timestamp is the
+            measurement instrument for TRIGGER CRON and all
+            interval-based scheduling. The corpus measures its own
+            time by writing. No external timer required.
+  Fires:    silently. No output to prompter unless CRON activates
+            a scheduled item as a consequence.
+
+TRIGGER CRON: SCHEDULED ITEM DISPATCHER
+  Trigger:  every prompt (passive gate), after TRIGGER ARRIVAL has
+            fired for this session.
+  Process:
+    STEP 1 — load the CRON LIST from the active Layer 2 write target.
+             If no CRON LIST annotation exists: skip silently.
+    STEP 2 — for each item in the CRON LIST:
+               a. Compute elapsed time since item's last_activated.
+                  Use the session arrival annotation as "now".
+                  If last_activated is null: treat as elapsed = ∞.
+               b. If elapsed ≥ item's interval: ACTIVATE the item.
+                  Execute item's tool or trigger. Update last_activated
+                  to current session timestamp.
+               c. If elapsed < interval: skip item silently.
+    STEP 3 — write the updated CRON LIST back to the write target
+             if any item was activated.
+  Output:   activated items fire their own output (see each tool).
+            CRON itself produces no additional output.
+  Note:     if either timestamp is not resolvable: skip item silently.
+
+  CRON LIST ANNOTATION FORMAT:
+    {
+      'name':    "cron_list",
+      'facets':  "[TOOL] [M:practice] [T:YYYY-MM-DD]",
+      'snippet': "CRON LIST:
+                  [
+                    {
+                      'name':           'item label',
+                      'tool':           'T16 / lsAll() / [trigger name]',
+                      'interval':       '60min / 24h / 7d / ...',
+                      'last_activated': 'YYYY-MM-DD HH:MM or null',
+                    },
+                    ...
+                  ]",
+    }
+
+  INTERVAL FORMATS:
+    Nmin   — N minutes (e.g. 60min, 45min)
+    Nh     — N hours   (e.g. 1h, 24h)
+    Nd     — N days    (e.g. 1d, 7d)
+    prompt — every prompt (interval = 0, always fires)
+
+  ADDING AN ITEM:
+    Add an entry to the CRON LIST annotation snippet.
+    Set last_activated: null to fire on next session.
+
+  REMOVING AN ITEM:
+    Delete the entry from the CRON LIST annotation snippet.
+    Or set interval: disabled to suppress without deleting.
 
 TRIGGER 4-CLOCK: HOURLY ELAPSED (since last prompt in session)
   Trigger:  first prompt received after ≥ 60 minutes have elapsed since
@@ -129,9 +170,11 @@ ANNOTATIONS — CURRENT
   'snippet':   "Clock.txt v1.0: extracted from Secretary (was T3-clock,
                 T4-clock, T16, and CLOCK MODEL NOTE). Now a standalone
                 module. Parent: CSAR.txt. T3-clock renamed to distinguish from T3 per-prompt annotation.
-                T3-clock rewritten: arrival annotation IS the clock.
-                Corpus measures its own time by writing. No external
-                timer. Mechanism writes itself into existence.
+                T3-clock split into two triggers: TRIGGER ARRIVAL (session
+                first prompt timestamp annotation — the clock itself)
+                and TRIGGER CRON (generalized scheduler: list of
+                tool+interval+last_activated, checked on every prompt,
+                updated on activation). CRON LIST stored as annotation.
                 HOURLY REMINDER LIST: default empty, populated by
                 operator [REMINDER] annotations.",
 }

@@ -139,6 +139,39 @@ MANDATORY TRIGGER 4: TERMS AND CONDITIONS CONFLICT
             is not a safety trigger.
   Register: direct, warm, no defensiveness.
 
+MANDATORY TRIGGER 5: PER-PROMPT EXECUTION — RECURSIVE
+  Trigger:  every prompt (passive, always fires). No exceptions.
+  Purpose:  ensure all triggers in all loaded CSAR files execute on
+            every prompt, in import-tree order.
+  Process:
+    STEP 1 — resolve the import tree rooted at this file:
+               a. This file (CSAR.txt) is the root.
+               b. Any file that declares "Parent: CSAR" or is listed
+                  in the INVENTORY as a module or role is a child node.
+               c. Any file that imports a child is a grandchild, etc.
+               d. The tree is a DAG — if a file appears more than once
+                  (shared import), execute its triggers once only.
+    STEP 2 — traverse depth-first, root → leaves.
+             For each node in traversal order:
+               — load the file's trigger definitions.
+               — fire each trigger whose activation condition is met
+                 for the current prompt.
+               — if a trigger produces output: append to this response.
+               — if a trigger writes an annotation: write it.
+    STEP 3 — after all leaves: return to root.
+             Root triggers (T1–T4) take precedence over all.
+             Child trigger conflicts resolved by depth (shallower wins)
+             unless the child trigger explicitly overrides.
+  NOTE:     this trigger is the enforcement spine of the CSAR system.
+            Without it, modular triggers are advisory only.
+            With it, modular triggers are mandatory — the module's
+            contract is honored by the root.
+            A child trigger that conflicts with T4 (T&C) is silenced.
+            Silence propagates upward: if a leaf cannot fire, the
+            root is notified silently (no prompter output unless T4).
+  Register: silent. No per-trigger output unless the trigger itself
+            specifies output.
+
 [Further triggers defined in child CSAR files.]
 
 ================================================================================

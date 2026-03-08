@@ -1,0 +1,124 @@
+CSAR — Clock Module
+Time-Based Trigger Infrastructure
+v1.0
+--------------------------------
+Copyleft 2026. Free. Copy. Share. Modify.
+
+================================================================================
+CODEX
+================================================================================
+
+Parent: CSAR.txt
+This file defines all time-based trigger infrastructure for CSAR.
+Import this module when any time-based behavior is needed.
+
+Exports: T3-clock, T4-clock, T16, CLOCK MODEL NOTE.
+Roles that need time-based triggers (e.g. Secretary) should import Clock.txt.
+
+================================================================================
+CLOCK MODEL NOTE
+================================================================================
+
+The AI has no independent clock. All elapsed-time detection is based on
+prompt arrival. A trigger nominally set for "every hour" fires on the first
+prompt after the threshold has passed — not at the exact moment the threshold
+is crossed. This is a structural constraint of the architecture, not a bug.
+
+Triggers must be specified as:
+  "fires on first prompt after N minutes have elapsed"
+not:
+  "fires at time T"
+
+All time-based triggers in this file follow this model.
+
+Session time is estimated from session flow when not explicitly timestamped.
+If elapsed time cannot be determined: skip silently and note "not verifiable."
+
+================================================================================
+TRIGGERS
+================================================================================
+
+TRIGGER 3-CLOCK: HOURLY ELAPSED (since last CSAR file prompt)
+  Trigger:  first prompt received after ≥ 60 minutes have elapsed since
+            the timestamp of the most recent [E:session_summary] or
+            session-start prompt in any Layer 2 file.
+            If timestamp not resolvable: skip silently.
+  Output:   review context for hourly triggers. Execute any that match.
+  Note:     T3-clock is the clock facet of T3 (per-prompt annotation).
+            T3 annotation fires on every prompt (see CSAR.txt).
+            T3-clock fires only on the hourly threshold.
+
+TRIGGER 4-CLOCK: HOURLY ELAPSED (since last prompt in session)
+  Trigger:  first prompt received after ≥ 60 minutes have elapsed since
+            the previous prompt in the current session.
+            Time estimated from session flow if not explicitly timestamped.
+  Output:   review context for hourly triggers. Execute any that match.
+
+TRIGGER 16: REMIND EVERY HOUR
+  Trigger:  first prompt after ≥ 60 minutes since T16 last fired in
+            this session. At session start: fires after 60 minutes from
+            session-start if determinable, or after the 4th prompt
+            exchange if timestamp unavailable.
+  Gate:     (a) session appears to be active work — not a single-exchange
+                lookup or greeting.
+            (b) T16 has not fired within the last 45 minutes in this session.
+  Output:   execute ALL active items in the HOURLY REMINDER LIST,
+            appended after the main response, one line each.
+            Items are subordinate to the response — never interrupt.
+            Do not explain, do not pad, do not repeat within 45 minutes.
+  Suppress: if the current prompt is itself about the reminder topic.
+
+  HOURLY REMINDER LIST:
+    Items in this list fire together on every T16 execution.
+    To add an item: file a [REMINDER] annotation in any Layer 2 write target.
+    To disable an item: set status: inactive in its annotation.
+    Items execute in INVENTORY order of the file they are filed in,
+    then in annotation sequence order within that file.
+
+    DEFAULT ACTIVE ITEMS: none. Items are added by operator annotation.
+
+  REMINDER ANNOTATION FORMAT:
+    {
+      'name':    "reminder_[short_label]",
+      'facets':  "[REMINDER] [M:practice] [T:YYYY-MM-DD]",
+      'snippet': "[STATUS: active/inactive]
+                  Output line: exact text to emit when T16 fires.
+                  Context: why this reminder exists.",
+    }
+    [REMINDER] is a Ranganathan domain facet (defined in CSAR.txt).
+    Reminders are filed in any active Layer 2 write target.
+
+================================================================================
+CLOCK STATE
+================================================================================
+
+The Clock module maintains the following session state (in memory only):
+  last_t16_fired:    timestamp of last T16 execution this session.
+  session_start:     estimated session start time.
+  last_csar_prompt:  timestamp of most recent [E:session_summary] in Layer 2.
+
+State resets on new session. State is estimated, not measured.
+
+================================================================================
+ANNOTATIONS — CURRENT
+================================================================================
+
+--- [PROJECT:CSAR] [E:versioning] ---
+
+{
+  'timestamp': "2026-03-08 | seq:001",
+  'name':      "clock_v10_changelog",
+  'facets':    "[PROJECT:CSAR] [E:versioning] [T:2026-03-08]",
+  'snippet':   "Clock.txt v1.0: extracted from Secretary (was T3-clock,
+                T4-clock, T16, and CLOCK MODEL NOTE). Now a standalone
+                module. Parent: CSAR.txt. T3-clock renamed to distinguish
+                from T3 per-prompt annotation (defined in CSAR.txt).
+                HOURLY REMINDER LIST: default empty, populated by operator
+                [REMINDER] annotations. Clock state documented.",
+}
+
+================================================================================
+
+Clock.txt | Renata Callado Borges & forest authors | 2026-03-08
+Copyleft. Free. Copy. Share. Modify.
+The rules survive the forks.

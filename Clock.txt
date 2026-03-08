@@ -45,36 +45,48 @@ TRIGGER ARRIVAL: SESSION FIRST PROMPT TIMESTAMP
             {
               'name':    "session_arrival_[YYYYMMDD]_[seq]",
               'facets':  "[SESSION] [E:arrival] [T:session_date]",
-              'snippet': "Session started. Arrival timestamp recorded.
-                          Prior corpus timestamp: [most recent [T:] in
-                          any Layer 2 file, or 'not resolvable'].",
+              'snippet': "Session started. First prompt arrived.",
             }
-  Note:     this annotation IS the clock. Its timestamp is the
-            measurement instrument for TRIGGER CRON and all
-            interval-based scheduling. The corpus measures its own
-            time by writing. No external timer required.
-  Fires:    silently. No output to prompter unless CRON activates
-            a scheduled item as a consequence.
+  Note:     reserved for future session-boundary behaviors.
+            Does not gate TRIGGER CRON — CRON runs independently
+            on every prompt.
+  Fires:    silently. No output to prompter.
+
+TRIGGER PROMPT: EVERY PROMPT TIMESTAMP
+  Trigger:  every prompt without exception (passive gate).
+  Output:   write a [SESSION] prompt annotation to the active
+            write target:
+            {
+              'name':    "session_prompt_[YYYYMMDD]_[seq]",
+              'facets':  "[SESSION] [E:prompt] [T:session_date]",
+              'snippet': "Prompt arrived. [seq N in session.]",
+            }
+  Note:     this annotation is the universal timestamp. TRIGGER CRON
+            reads the most recent [E:prompt] annotation as "now" for
+            all interval calculations. The corpus measures its own
+            time by writing.
+  Fires:    silently before TRIGGER CRON on every prompt.
 
 TRIGGER CRON: SCHEDULED ITEM DISPATCHER
-  Trigger:  every prompt (passive gate), after TRIGGER ARRIVAL has
-            fired for this session.
+  Trigger:  every prompt (passive gate), after TRIGGER PROMPT has
+            written the current timestamp annotation.
   Process:
     STEP 1 — load the CRON LIST from the active Layer 2 write target.
              If no CRON LIST annotation exists: skip silently.
-    STEP 2 — for each item in the CRON LIST:
-               a. Compute elapsed time since item's last_activated.
-                  Use the session arrival annotation as "now".
-                  If last_activated is null: treat as elapsed = ∞.
+    STEP 2 — read "now" from the most recent [E:prompt] annotation
+             timestamp in any Layer 2 file.
+             If not resolvable: skip all items silently.
+    STEP 3 — for each item in the CRON LIST:
+               a. Compute elapsed = now − item's last_activated.
+                  If last_activated is null: treat elapsed = ∞.
                b. If elapsed ≥ item's interval: ACTIVATE the item.
                   Execute item's tool or trigger. Update last_activated
-                  to current session timestamp.
+                  to current prompt timestamp.
                c. If elapsed < interval: skip item silently.
-    STEP 3 — write the updated CRON LIST back to the write target
+    STEP 4 — write the updated CRON LIST back to the write target
              if any item was activated.
   Output:   activated items fire their own output (see each tool).
             CRON itself produces no additional output.
-  Note:     if either timestamp is not resolvable: skip item silently.
 
   CRON LIST ANNOTATION FORMAT:
     {
@@ -170,11 +182,12 @@ ANNOTATIONS — CURRENT
   'snippet':   "Clock.txt v1.0: extracted from Secretary (was T3-clock,
                 T4-clock, T16, and CLOCK MODEL NOTE). Now a standalone
                 module. Parent: CSAR.txt. T3-clock renamed to distinguish from T3 per-prompt annotation.
-                T3-clock split into two triggers: TRIGGER ARRIVAL (session
-                first prompt timestamp annotation — the clock itself)
-                and TRIGGER CRON (generalized scheduler: list of
-                tool+interval+last_activated, checked on every prompt,
-                updated on activation). CRON LIST stored as annotation.
+                Three triggers: TRIGGER ARRIVAL (session first prompt, reserved
+                for future session-boundary behaviors), TRIGGER PROMPT
+                (every prompt timestamp annotation — the clock),
+                TRIGGER CRON (scheduler: CRON LIST of tool+interval+
+                last_activated, reads [E:prompt] as 'now', fires on
+                every prompt independently of ARRIVAL).
                 HOURLY REMINDER LIST: default empty, populated by
                 operator [REMINDER] annotations.",
 }

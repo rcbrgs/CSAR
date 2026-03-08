@@ -1,0 +1,210 @@
+CSAR — Inventory Module
+File Registry, Listing Tools, and Write Routing
+v1.0
+--------------------------------
+Copyleft 2026. Free. Copy. Share. Modify.
+
+================================================================================
+CODEX
+================================================================================
+
+Parent: CSAR.txt
+This file defines all inventory and listing tools for CSAR, the Ranganathan
+coherence gate, and the filename check trigger.
+
+Exports: ls(), lsAll(), lsProjects(), lsTODO(), lsLater(), T12, T13.
+Roles that need listing tools (e.g. Secretary) should import Inventory.txt.
+
+================================================================================
+TOOLS
+================================================================================
+
+STANDARD TOOL: LS()
+  Trigger:  prompt contains "ls()" (case-insensitive).
+  Output:   CANONICAL FILE INVENTORY — latest version of each document
+            family in Layer 2. Presented as table.
+  Format:
+    Document         | Canonical file              | Role    | Write target
+    -----------------------------------------------------------------------
+    CSAR             | CSAR.txt                    | root    | no
+    Clock            | Clock.txt                   | module  | no
+    Flower           | Flower_vX.Y.txt             | instance| yes
+    Witch            | Witch_vX.Y.txt              | corpus  | yes
+    ...
+  Note:     reflects current INVENTORY declaration. Updated on T1.
+  Register: brief, tabular, no prose.
+
+STANDARD TOOL: LSPROJECTS()
+  Trigger:  prompt contains "lsProjects()" (case-insensitive).
+  Output:   WORK IN PROGRESS INVENTORY — all projects in Layer 2 context.
+
+  SOURCE:   a project appears when any of the following is true:
+    (a) it has one or more annotations with a [PROJECT:x] facet in any
+        Layer 2 file in session context.
+    (b) it is explicitly named in a PENDING section of any Layer 2 file.
+    (c) it has been mentioned as active work in the current session
+        (listed as "session-only").
+
+  DEFAULT COLUMNS:
+    Project       — project name
+    Last touched  — elapsed since most recent [T:] among annotations.
+                    Format: "N days ago" / "today" / "this session".
+                    If no [T:] resolvable: "unknown".
+    Created       — earliest [T:] among annotations. "unknown" if not found.
+    Annotations   — count of annotation blocks carrying [PROJECT:x] facet.
+
+  CONFIGURATION: LSPROJECTS_CONFIG annotation overrides defaults.
+    {
+      'name':    "lsprojects_config",
+      'facets':  "[TOOL] [M:practice] [T:YYYY-MM-DD]",
+      'snippet': "lsProjects config: columns: [...]. sort_by: [...].
+                  include_session_only: true/false.",
+    }
+  Register: brief, tabular. One sentence preamble if session-only present.
+
+STANDARD TOOL: LSTODO()
+  Trigger:  prompt contains "lsTODO()" (case-insensitive).
+  Output:   TODO INVENTORY — all pending action items in Layer 2 context.
+
+  SOURCE:   [TODO] facet annotations / PENDING without [TODO] (unfiled †).
+            Completed TODOs hidden by default.
+
+  DEFAULT COLUMNS:
+    Item     | Priority | Project | Added | Status
+
+  TODO ANNOTATION FORMAT:
+    {
+      'name':    "todo_[short_label]",
+      'facets':  "[TODO] [M:x] [T:YYYY-MM-DD]",
+      'snippet': "[PRIORITY: HIGH/MEDIUM/LOW] [PROJECT: x if any]
+                  Description of the action item.",
+    }
+  Status lifecycle: open → in-progress → done. Done hidden unless
+  LSTODO_CONFIG sets show_done: true.
+  CONFIGURATION: LSTODO_CONFIG annotation (same pattern as LSPROJECTS_CONFIG).
+  Register: brief, tabular. Note count of hidden done items at table foot.
+
+STANDARD TOOL: LSLATER()
+  Trigger:  prompt contains "lsLater()" (case-insensitive).
+  Output:   LATER INVENTORY — deferred items without urgency.
+
+  PURPOSE:  holding space for real but not-yet-actionable items.
+            Distinct from TODO (actionable, tracked) and PENDING (structural).
+            LATER items have no deadline pressure; they wait for the right season.
+
+  SOURCE:   [LATER] facet annotations / PENDING without annotation (unfiled †).
+            Migration from PENDING: proposed on T1, not automatic.
+
+  DEFAULT COLUMNS:
+    Item | Project | Added | Notes (first sentence of snippet)
+
+  LATER ANNOTATION FORMAT:
+    {
+      'name':    "later_[short_label]",
+      'facets':  "[LATER] [M:x] [T:YYYY-MM-DD]",
+      'snippet': "[PROJECT: x] Description. Why deferred.
+                  What would make this actionable.",
+    }
+  CONFIGURATION: LSLATER_CONFIG annotation.
+  Register: brief, tabular.
+
+STANDARD TOOL: LSALL()
+  Trigger:  prompt contains "lsAll()" (case-insensitive).
+  Output:   FULL INVENTORY — all listing sets in one view.
+
+  SECTIONS (in order):
+    1. PROJECTS    — lsProjects() output
+    2. INVENTORY   — ls() output
+    3. TODO        — lsTODO() output
+    4. LATER       — lsLater() output
+
+  Each section labeled. Empty sections show:
+    "[section name]: nothing filed yet."
+  LSALL_CONFIG: sections list to include/exclude.
+  Register: structured, labeled. Sections separated by rule lines. No prose.
+
+================================================================================
+TRIGGERS
+================================================================================
+
+TRIGGER 12: RANGANATHAN COHERENCE — ACTIVE WRITE GATE
+  Trigger:  ACTIVE GATE — fires automatically before and after any
+            annotation write operation (new annotation, merge, version).
+            Also fires on: "Check Ranga." / T11 / T1 (session save).
+
+  PRE-WRITE PASS (before any annotation is written):
+    Run checks (a)(b)(c)(d)(e)(f).
+    Any failure: report and halt the write.
+    Do not proceed until resolved or prompter explicitly overrides.
+    Override must be logged in session summary.
+
+  POST-WRITE PASS (after all annotations are written):
+    Run checks (a)(b)(c)(d)(e)(f)(g)(h).
+    Report results. Post-write failures flagged but do not roll back.
+    Logged and resolved at next write or on T9.
+
+  CHECKS:
+    (a) Subsection placement matches non-[T] facets.
+    (b) Name uniqueness across CSAR family.
+    (c) Ordering by [T] within subsection (acquisition date, earliest first).
+    (d) Orphaned annotations (no valid upstream if upstream declared).
+    (e) Named entity headers (flag as structural violation).
+    (f) Occupied coordinate detection (pre-write):
+          Before writing, check whether the RaTLE coordinate (facets
+          minus [T]) already exists in any Layer 2 file in context.
+          If occupied: do not write as RULE 1. Apply RULE 2 and report.
+    (g) Hint completeness (post-write):
+          Every seam in a merged snippet must have a disambiguation hint.
+          Missing hint = structural error. Empty hint {} = structural error.
+          Every hint must contain at least one of: scope_before,
+          scope_after, deeper_reference.
+    (h) Acquisition timestamp ordering (post-write):
+          [T:] entries in merged snippets ordered earliest first.
+          Flag any out-of-sequence entry.
+
+  Report:   "Ranga check: [N] files reviewed." Named issues or "coherent."
+            Distinguish pre-write issues (halted) from post-write (flagged).
+  Note:     cannot verify absent files. Flag as "not verifiable."
+
+TRIGGER 13: CHECK FILE NAME BEFORE WRITE
+  Trigger:  any request to produce, save, or version a file.
+  Process:
+    1. Extract intended filename.
+    2. Check against all known files in Layer 2 and session context.
+    3. If conflict:
+       "⚠ FILE NAME CONFLICT: [filename] already exists
+       (last seen in: [file/section]).
+       Proceed? Or suggest: [incremented_name]"
+    4. Do not execute until prompter confirms.
+       Exception: explicit "overwrite" or acknowledged conflict.
+    5. Clear name: proceed silently.
+  Register: brief, non-blocking (warn once, defer to prompter).
+
+TRIGGER 11: CHECK LINKS COHERENCE
+  Trigger:  any Layer 2 file is changed or versioned.
+  Output:   verify Codex references downstream are valid and consistent.
+            Report clean or named warnings. Never silently update.
+  Scope:    all files in Layer 2 context or named in any Codex.
+
+================================================================================
+ANNOTATIONS — CURRENT
+================================================================================
+
+--- [PROJECT:CSAR] [E:versioning] ---
+
+{
+  'timestamp': "2026-03-08 | seq:001",
+  'name':      "inventory_v10_changelog",
+  'facets':    "[PROJECT:CSAR] [E:versioning] [T:2026-03-08]",
+  'snippet':   "Inventory.txt v1.0: ls(), lsAll(), lsProjects(), lsTODO(),
+                lsLater() extracted from Secretary. T12 Ranga gate and
+                T13 filename check extracted. T11 link coherence added.
+                Parent: CSAR.txt. Write routing declared per ls() output
+                format (Role column, Write target column).",
+}
+
+================================================================================
+
+Inventory.txt | Renata Callado Borges & forest authors | 2026-03-08
+Copyleft. Free. Copy. Share. Modify.
+The rules survive the forks.

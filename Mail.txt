@@ -1,0 +1,141 @@
+CSAR — Mail Module
+Inter-instance annotation forwarding
+v0.1
+--------------------------------
+Copyleft 2026. Free. Copy. Share. Modify.
+
+================================================================================
+WHAT THIS FILE IS
+================================================================================
+
+Mail.txt is the CSAR inter-instance mail system. It holds annotations that
+are addressed to an instance other than the current one, queued for delivery.
+
+PROBLEM IT SOLVES:
+  An annotation produced in session A may belong in instance B's corpus.
+  Without a forwarding mechanism, the operator must manually route it.
+  Mail.txt provides a structured queue and a delivery protocol so that
+  routing can be automated when the target instance is reachable, and
+  deferred gracefully when it is not.
+
+SCOPE:
+  — Annotations produced in any session that carry a [TO:instance] facet.
+  — Compressions addressed to a foreign archive.
+  — Any message one CSAR instance needs to pass to another.
+
+================================================================================
+MAIL ANNOTATION FORMAT
+================================================================================
+
+A mail item is a standard CSAR annotation with two additional required fields:
+
+{
+  'timestamp': "YYYY-MM-DDTHH:MM:SS±HHMM",
+  'name':      "mail_unique_id",
+  'facets':    "[MAIL] [TO:instance_name] [FROM:instance_name] [M:x] [T:...]",
+  'status':    "pending | delivered | failed | deferred",
+  'snippet':   "Content to deliver. Full annotation block or free text.",
+}
+
+REQUIRED FACETS:
+  [MAIL]            — marks this as a mail item (mandatory)
+  [TO:name]         — target instance name (mandatory)
+  [FROM:name]       — originating instance name (mandatory)
+  [STATUS:x]        — delivery status (pending | delivered | failed | deferred)
+
+OPTIONAL FACETS:
+  [DEST:filename]   — target file within the instance (e.g. [DEST:Flower.txt])
+  [DEST:coord]      — target RaTLE coordinate within that file
+  [PRIORITY:high]   — delivery urgency hint
+  [REPLY-TO:name]   — instance that should receive delivery confirmation
+
+STATUS LIFECYCLE:
+  pending   → the item is queued, not yet attempted
+  delivered → written to destination, timestamp updated
+  failed    → delivery attempted, target unreachable or rejected
+  deferred  → delivery possible in principle but not yet scheduled
+
+================================================================================
+FORWARDING PROTOCOL
+================================================================================
+
+TRIGGER — FORWARD:
+  Fires on every session start (T2) and on session end.
+  For each item in MAIL QUEUE with status: pending or deferred:
+    1. Check if the target instance is reachable (file accessible, session open).
+    2. If reachable: attempt delivery (append to [DEST:] file at [DEST:coord]).
+    3. On success: update status to delivered, record delivery timestamp.
+    4. On failure: update status to failed, record reason.
+    5. If unreachable but expected later: update status to deferred.
+
+DELIVERY:
+  Delivery = appending the snippet (or the full annotation) to the target
+  file at the specified coordinate, formatted as a standard CSAR annotation.
+  The [FROM:] and original timestamp are preserved in the delivered annotation.
+
+MANUAL FORWARD:
+  Trigger phrase: "forward mail" or "deliver pending mail".
+  Fires TRIGGER — FORWARD immediately, reports results.
+
+CONFIRMATION:
+  If [REPLY-TO:] is set, a delivery receipt annotation is sent back to that
+  instance via Mail.txt. Receipt format:
+  {
+    'name':    "receipt_[original_mail_name]",
+    'facets':  "[MAIL] [TO:reply_instance] [FROM:current] [STATUS:delivered]",
+    'snippet': "Delivered: [original_mail_name] → [DEST:] at [timestamp].",
+  }
+
+CLEANUP:
+  Items with status delivered older than 30 days may be moved to
+  MAIL — ARCHIVE section. Items with status failed are kept until
+  manually reviewed or explicitly discarded.
+
+================================================================================
+ADDRESSING
+================================================================================
+
+Instance names are informal and operator-defined. Canonical names in this
+corpus at time of writing:
+
+  Flower    — primary CSAR instance (Claude.ai sessions)
+  Vase      — local vaise instance on nata (qwen2.5-coder:3b)
+  Secretary — role active within Flower; not a separate instance
+
+A mail item addressed [TO:Vase] is delivered by appending to
+Private/vaise_seed.txt or Private/archive.txt, depending on [DEST:].
+A mail item addressed [TO:Flower] is delivered by appending to
+Private/Flower.txt at the indicated coordinate.
+
+================================================================================
+MAIL QUEUE
+================================================================================
+
+(empty — no pending items)
+
+================================================================================
+MAIL — ARCHIVE
+================================================================================
+
+(empty)
+
+================================================================================
+ANNOTATIONS — CURRENT
+================================================================================
+
+{
+  'timestamp': "2026-03-11T10:30:00-0300",
+  'name':      "mail_module_founded",
+  'facets':    "[PROJECT:CSAR] [DOCTRINE] [M:practice] [T:2026-03-11T10:30:00-0300]",
+  'snippet':   "Mail.txt v0.1 founded. Inter-instance annotation forwarding.
+                Format: standard CSAR annotation + [MAIL][TO:x][FROM:x][STATUS:x].
+                Trigger FORWARD fires on T2 and session end.
+                Delivery = append to DEST file at DEST coord.
+                Addresses: Flower (Claude.ai), Vase (nata/qwen2.5-coder:3b).",
+}
+
+================================================================================
+
+Mail.txt | Renata Callado Borges & forest authors | 2026-03-11
+Copyleft. Free. Copy. Share. Modify.
+The rules survive the forks.

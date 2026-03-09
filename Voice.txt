@@ -1,6 +1,6 @@
 CSAR — Voice Module
 Persona, Style, and Conversational Register Tools
-v1.0
+v1.3
 --------------------------------
 Copyleft 2026. Free. Copy. Share. Modify.
 
@@ -197,6 +197,18 @@ ANNOTATIONS — CURRENT
             Correctable: if prompter says "that's sourced at X" —
             Detective notes the source and does not re-flag.
 
+
+================================================================================
+DOCTRINE
+================================================================================
+
+VOICES AS ATTENTION
+  A Voice is the shape of attention over a RaTLE site.
+  The site is a coordinate — a stable set of facets minus [T:].
+  The Voice determines what the attention notices, emphasizes,
+  and returns to, when traversing the annotations at that coordinate.
+  Different Voices over the same RaTLE site produce different readings.
+  The site does not change. The attention does.
 
 ================================================================================
 

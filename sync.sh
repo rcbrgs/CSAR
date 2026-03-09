@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 # sync.sh — CSAR file sync
 #
+# NOTE: vaise.py deploys to ~/claudette/ (outside CSAR repo).
+# Commit it separately: cd ~/claudette && git add vaise.py && git commit
+#
 #   cd ~/Downloads && unzip -o files.zip
 #   source sync.sh | tee -a ~/claudette/sync.log
 #   rm files.zip sync.sh
-# sync.sh cleans up the .txt/.py files it deployed.
 
 set -euo pipefail
 CSAR_ROOT="$HOME/claudette/CSAR"
@@ -30,10 +32,10 @@ deploy() {
 
 echo "=== verify $(date '+%Y-%m-%dT%H:%M:%S') ==="
 # sync.sh excluded — always freshly generated
-  check "vaise.py" "73738e76158f2adf17029234bee0c9c1e797dde24e9cb0621992c0a214ac0863"
-  check "vaise_seed.txt" "38f3cecd8263b45b0d973dae5d94bf9f440f63fc0e2ea5b410e177ec568a9c27"
-  check "Renata.txt" "9f0722e7b60b04e757b1efdc3aefef43c85d5415c5d1f6d1a77bcd457e5e3efa"
-  check "Hacker.txt" "39e4b60b6eeee6589d982083a7c63b4bb9ec3e88ac080feb59f9ff3734405adb"
+  check "vaise.py" "271739166626f4dbac40911c466d4790d3c91a09460c18bd4b07be745acb9c42"
+  check "vaise_seed.txt" "33b23e607613ddafa4182761ddb4e5aed91eb21bfab5890f8118da7ca4e58991"
+  check "Renata.txt" "325042670b357ffaf0fcfd5ac57602783651c643bac6776f287503d25e00f07f"
+  check "Hacker.txt" "0c595c7eb85c3fdd8429eaaf6d69b958f95ddaee970873256313ff21fdfd4076"
   check "Mail.txt" "0e70b76a124dd5d672bbc26ff515cd2a6781b3d09040736e885ced922c5df09c"
   check "Witch.txt" "c052aa9d3db665f976fdebdab9fcbe33e495c8eda3f0a4785303c409815152f6"
   check "Flower.txt" "fb7c53d2d1c4c9513abb74c0c8bc9de82bdaba85bab69f63229ab813a17e258d"
@@ -45,6 +47,7 @@ if [ "$fail" -gt 0 ]; then
   echo -e "${RED}$fail failed — aborting deploy.${NC}"
   return 1 2>/dev/null || exit 1
 fi
+
 echo "=== deploy ==="
   deploy "vaise.py" "~/claudette/vaise.py"
   deploy "vaise_seed.txt" "~/claudette/CSAR/Private/vaise_seed.txt"
@@ -64,7 +67,9 @@ done
 
 echo ""
 echo -e "${GRN}done.${NC} $ok deployed, $skip skipped."
-echo "=== git ==="
+echo "=== git (CSAR) ==="
 cd "$CSAR_ROOT"
 git status --short
 echo "Run: git add -A && git commit -m \"your message\""
+echo ""
+echo "NOTE: vaise.py → ~/claudette/ (separate repo — commit manually)"

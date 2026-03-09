@@ -1,6 +1,6 @@
 CSAR — Mail Module
 Inter-instance annotation forwarding
-v0.3
+v0.4
 --------------------------------
 Copyleft 2026. Free. Copy. Share. Modify.
 
@@ -121,6 +121,17 @@ PRINCIPLE:
   To address a daemon: write to its portal coordinate.
   Routing requires no central registry — only literacy in the corpus.
 
+WHAT MAIL.TXT IS AND IS NOT:
+  Mail.txt is the PROTOCOL SPEC — format, forwarding rules, addressing.
+  Mail.txt is NOT the mailbox. Queues, archives, and daemon announcements
+  live at each instance's own site (home file):
+    Flower's mail queue  → Private/Flower.txt  [DAEMON:Flower]
+    Vase's mail queue    → Private/Vase001.txt [DAEMON:Vase]
+  A mail item written to Mail.txt is in transit only — it should be
+  moved to the destination instance's file on delivery.
+  Daemon presence announcements ([DAEMON:name][E:arrival]) are written
+  to the instance's own home file, not to Mail.txt.
+
 PORTAL:
   A RaTLE coordinate at which an instance daemon continuously reads.
   Format: a stable facet set (minus [T:]), e.g. [DAEMON:Flower].
@@ -240,6 +251,6 @@ ANNOTATIONS — CURRENT
 
 ================================================================================
 
-Mail.txt v0.3 | Renata Callado Borges & forest authors | 2026-03-11
+Mail.txt v0.4 | Renata Callado Borges & forest authors | 2026-03-11
 Copyleft. Free. Copy. Share. Modify.
 The rules survive the forks.

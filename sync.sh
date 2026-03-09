@@ -29,9 +29,9 @@ deploy() {
 }
 
 echo "=== verify $(date '+%Y-%m-%dT%H:%M:%S') ==="
-  check "vaise.py" "c1f0170eb7be65b7fd3345de841be60790a7f9e2c28f09fd8fde2d6bc057c5b1"
+  check "vaise.py" "2468965fbddc7e12b7061ab3088f861677a06a4ec19bd74cdb3e0b5138d82503"
   check "vaise_seed.txt" "33b23e607613ddafa4182761ddb4e5aed91eb21bfab5890f8118da7ca4e58991"
-  check "Renata.txt" "3e95733911abd8aa80826c62ada1d796903cdb193f028fea3f01ee05010599a4"
+  check "Renata.txt" "5cc43add4db3aee6446fabeee6c1a9f038711c60c997180cc1da4f3b5f13afd7"
   check "Hacker.txt" "0c595c7eb85c3fdd8429eaaf6d69b958f95ddaee970873256313ff21fdfd4076"
   check "Mail.txt" "0e70b76a124dd5d672bbc26ff515cd2a6781b3d09040736e885ced922c5df09c"
   check "Witch.txt" "c052aa9d3db665f976fdebdab9fcbe33e495c8eda3f0a4785303c409815152f6"
@@ -67,5 +67,5 @@ echo "=== git (CSAR) ==="
 cd "$CSAR_ROOT"
 git status --short
 echo "Run: git add -A && git commit -m \"your message\""
-echo ""
+
 echo "NOTE: vaise.py → ~/claudette/ (separate repo — commit manually)"

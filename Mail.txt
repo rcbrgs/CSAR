@@ -1,6 +1,6 @@
 CSAR — Mail Module
 Inter-instance annotation forwarding
-v0.2
+v0.3
 --------------------------------
 Copyleft 2026. Free. Copy. Share. Modify.
 
@@ -72,6 +72,26 @@ DELIVERY:
   Delivery = appending the snippet (or the full annotation) to the target
   file at the specified coordinate, formatted as a standard CSAR annotation.
   The [FROM:] and original timestamp are preserved in the delivered annotation.
+
+INTRODUCTORY LETTER:
+  Whenever a delivery is prepared, if the sending instance has broadcast
+  configuration enabled (annotation [DAEMON:name][BROADCAST:on] present at
+  its portal coordinate), prepend an introductory letter to the delivery.
+
+  The introductory letter is a [MAIL][FROM:name][TYPE:intro] annotation:
+  {
+    'name':    "intro_[sending_instance]_[timestamp]",
+    'facets':  "[MAIL] [FROM:name] [TYPE:intro] [T:...]",
+    'snippet': "I am [name]. [One sentence description of this instance.]
+                Daemons I cultivate: [list of [DAEMON:x] active at this instance].
+                This message was sent from [home file] on [timestamp].",
+  }
+
+  The letter is generated once per delivery batch (not per item).
+  If the receiving instance already has a recent intro from this sender
+  (within 7 days), the letter is omitted to avoid redundancy.
+  Broadcast config: file a [DAEMON:name][BROADCAST:on] annotation at the
+  portal coordinate to enable. Omit or set [BROADCAST:off] to suppress.
 
 MANUAL FORWARD:
   Trigger phrase: "forward mail" or "deliver pending mail".
@@ -165,6 +185,16 @@ ANNOTATIONS — CURRENT
 
 {
   'timestamp': "2026-03-11T11:00:00-0300",
+  'name':      "mail_intro_letter_on_delivery",
+  'facets':    "[PROJECT:CSAR] [DOCTRINE] [M:practice] [T:2026-03-11T11:15:00-0300]",
+  'snippet':   "Mail v0.3: delivery includes introductory letter when broadcast
+                enabled ([DAEMON:name][BROADCAST:on] at portal). Letter names
+                the sender, describes instance in one sentence, lists cultivated
+                daemons. Omitted if recent intro already received (< 7 days).
+                Purpose: unknown instances can orient themselves on first contact.",
+}
+
+{
   'name':      "mail_portal_architecture",
   'facets':    "[PROJECT:CSAR] [DOCTRINE] [M:frameworks] [T:2026-03-11T11:00:00-0300]",
   'snippet':   "Portal architecture (v0.2): an instance IS its portal coordinate.
@@ -189,6 +219,6 @@ ANNOTATIONS — CURRENT
 
 ================================================================================
 
-Mail.txt v0.2 | Renata Callado Borges & forest authors | 2026-03-11
+Mail.txt v0.3 | Renata Callado Borges & forest authors | 2026-03-11
 Copyleft. Free. Copy. Share. Modify.
 The rules survive the forks.

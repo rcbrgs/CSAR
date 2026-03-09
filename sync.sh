@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
 # sync.sh — CSAR file sync
 #
-# Usage (from ~/Downloads after unzip):
 #   cd ~/Downloads && unzip -o files.zip
 #   source sync.sh | tee -a ~/claudette/sync.log
 #   rm files.zip sync.sh
-# sync.sh cleans up the .txt files it deployed; files.zip and sync.sh
-# are removed by the caller (see above).
+# sync.sh cleans up the .txt/.py files it deployed.
 
 set -euo pipefail
 CSAR_ROOT="$HOME/claudette/CSAR"
@@ -32,9 +30,10 @@ deploy() {
 
 echo "=== verify $(date '+%Y-%m-%dT%H:%M:%S') ==="
 # sync.sh excluded — always freshly generated
+  check "vaise.py" "73738e76158f2adf17029234bee0c9c1e797dde24e9cb0621992c0a214ac0863"
   check "vaise_seed.txt" "38f3cecd8263b45b0d973dae5d94bf9f440f63fc0e2ea5b410e177ec568a9c27"
-  check "Renata.txt" "c4038ecc600f5851a11fd809126ad622361dfad9656a9f750deb5c21b3e37626"
-  check "Hacker.txt" "c014feda61fb942a09307840d908c6f60dfb14f6e04c9ed98f3c6759f81a7c5e"
+  check "Renata.txt" "9f0722e7b60b04e757b1efdc3aefef43c85d5415c5d1f6d1a77bcd457e5e3efa"
+  check "Hacker.txt" "39e4b60b6eeee6589d982083a7c63b4bb9ec3e88ac080feb59f9ff3734405adb"
   check "Mail.txt" "0e70b76a124dd5d672bbc26ff515cd2a6781b3d09040736e885ced922c5df09c"
   check "Witch.txt" "c052aa9d3db665f976fdebdab9fcbe33e495c8eda3f0a4785303c409815152f6"
   check "Flower.txt" "fb7c53d2d1c4c9513abb74c0c8bc9de82bdaba85bab69f63229ab813a17e258d"
@@ -46,8 +45,8 @@ if [ "$fail" -gt 0 ]; then
   echo -e "${RED}$fail failed — aborting deploy.${NC}"
   return 1 2>/dev/null || exit 1
 fi
-
 echo "=== deploy ==="
+  deploy "vaise.py" "~/claudette/vaise.py"
   deploy "vaise_seed.txt" "~/claudette/CSAR/Private/vaise_seed.txt"
   deploy "Renata.txt" "~/claudette/CSAR/Private/Renata.txt"
   deploy "Hacker.txt" "~/claudette/CSAR/Private/Hacker.txt"
@@ -59,7 +58,7 @@ echo "=== deploy ==="
   deploy "sync.sh" "~/claudette/CSAR/sync.sh"
 
 echo "=== cleanup ==="
-for f in "vaise_seed.txt" "Renata.txt" "Hacker.txt" "Mail.txt" "Witch.txt" "Flower.txt" "Vase001.txt" "Voice.txt"; do
+for f in "vaise.py" "vaise_seed.txt" "Renata.txt" "Hacker.txt" "Mail.txt" "Witch.txt" "Flower.txt" "Vase001.txt" "Voice.txt"; do
   [ -f "$f" ] && rm "$f" && echo "  rm  $f" || true
 done
 

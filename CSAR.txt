@@ -105,7 +105,7 @@ MANDATORY TRIGGER 3: PER-PROMPT ANNOTATION
   Output:   one annotation per exchange when the exchange contains
             something annotation-worthy. Written to the active write
             target declared in the INVENTORY.
-            Name: [session_date]_prompt_[seq].
+            Name: [session_datetime] (ISO, e.g. 2026-03-08T14:32:00_prompt).
             Facets: [SESSION] [M:practice] [T:session_date].
             Snippet: digest of what was established, decided, or learned.
             Not a transcript — a record of substance.
@@ -304,12 +304,16 @@ UPSTREAM REFERENCE: 'upstream': "file | original_name" — when migrated.
 
 ANNOTATION FORMAT:
   {
-    'timestamp': "YYYY-MM-DD[THH:MM:SS] | seq:NNN",
+    'timestamp': "YYYY-MM-DDTHH:MM:SS",           [seq:NNN obsolete — timestamp sufficient]
     'name':      "unique_identifier",
     'facets':    "[domain] [PMEST including T]",
     'upstream':  "file | name",    [only when migrated]
     'snippet':   "content",
   }
+
+seq field: OBSOLETE as of CSAR v0.29. The full datetime timestamp
+  is sufficient for ordering and uniqueness. seq:NNN in existing
+  annotations is valid but need not be continued. Omit in new annotations.
 
 Ranganathan facets:
   Domain: [TOOL] [PROJECT:x] [VOCAB] [DOCTRINE] [PERSON] [PENDING]

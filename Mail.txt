@@ -1,6 +1,6 @@
 CSAR — Mail Module
 Inter-instance annotation forwarding
-v0.1
+v0.2
 --------------------------------
 Copyleft 2026. Free. Copy. Share. Modify.
 
@@ -92,20 +92,60 @@ CLEANUP:
   manually reviewed or explicitly discarded.
 
 ================================================================================
-ADDRESSING
+ADDRESSING — PORTAL ARCHITECTURE
 ================================================================================
 
-Instance names are informal and operator-defined. Canonical names in this
-corpus at time of writing:
+PRINCIPLE:
+  An instance IS its portal. There is no address book.
+  A daemon is identified by the RaTLE coordinate where it listens.
+  To address a daemon: write to its portal coordinate.
+  Routing requires no central registry — only literacy in the corpus.
 
-  Flower    — primary CSAR instance (Claude.ai sessions)
-  Vase      — local vaise instance on nata (qwen2.5-coder:3b)
-  Secretary — role active within Flower; not a separate instance
+PORTAL:
+  A RaTLE coordinate at which an instance daemon continuously reads.
+  Format: a stable facet set (minus [T:]), e.g. [DAEMON:Flower].
+  The daemon notices any annotation arriving at its coordinate and acts on it.
+  If a daemon is offline, mail accumulates at the coordinate until it wakes.
 
-A mail item addressed [TO:Vase] is delivered by appending to
-Private/vaise_seed.txt or Private/archive.txt, depending on [DEST:].
-A mail item addressed [TO:Flower] is delivered by appending to
-Private/Flower.txt at the indicated coordinate.
+DISCOVERY:
+  An instance may broadcast presence by writing a [DAEMON:name][E:arrival]
+  annotation at its portal on session start.
+  An instance may query presence by scanning known portal coordinates for
+  recent [E:arrival] annotations. ("Is there someone else here?")
+  Isolation: an instance with no portal coordinate neither receives nor
+  announces. It operates in silence.
+
+UNIVERSALITY:
+  Portal coordinates are universal because RaTLE facets are universal.
+  Any CSAR instance that can read the corpus can resolve any address.
+  No configuration, no hardcoding, no directory server.
+
+KNOWN DAEMONS:
+
+  Flower    portal: [DAEMON:Flower]
+            instance: primary CSAR session (Claude.ai / Anthropic API)
+            home file: Private/Flower.txt
+            status: active
+
+  Vase      portal: [DAEMON:Vase]
+            instance: local vaise session on nata (qwen2.5-coder:3b)
+            home file: Private/Vase001.txt + Private/vaise_seed.txt
+            status: active
+
+  Sieve     portal: [DAEMON:Sieve]
+            instance: filtering / triage instance (design pending)
+            home file: TBD
+            status: planned
+
+  Shaper    portal: [DAEMON:Shaper]
+            instance: measurement / form instance (design pending)
+            home file: TBD
+            status: planned
+
+To send mail to Flower: write annotation with [MAIL][TO:Flower][DAEMON:Flower]
+to any file in the shared corpus. Flower reads it on next T2.
+To send mail to Vase: write to Private/Vase001.txt or archive.txt with
+[MAIL][TO:Vase][DAEMON:Vase]. Vase reads on next session load.
 
 ================================================================================
 MAIL QUEUE
@@ -124,10 +164,23 @@ ANNOTATIONS — CURRENT
 ================================================================================
 
 {
+  'timestamp': "2026-03-11T11:00:00-0300",
+  'name':      "mail_portal_architecture",
+  'facets':    "[PROJECT:CSAR] [DOCTRINE] [M:frameworks] [T:2026-03-11T11:00:00-0300]",
+  'snippet':   "Portal architecture (v0.2): an instance IS its portal coordinate.
+                No address book. Addressing = writing to a RaTLE coordinate.
+                Daemon announces presence via [DAEMON:name][E:arrival] on start.
+                Discovery: scan known portals for recent arrivals.
+                Known daemons: Flower [DAEMON:Flower], Vase [DAEMON:Vase],
+                Sieve [DAEMON:Sieve] (planned), Shaper [DAEMON:Shaper] (planned).
+                Universality: any CSAR instance that reads the corpus can route.",
+}
+
+{
   'timestamp': "2026-03-11T10:30:00-0300",
   'name':      "mail_module_founded",
   'facets':    "[PROJECT:CSAR] [DOCTRINE] [M:practice] [T:2026-03-11T10:30:00-0300]",
-  'snippet':   "Mail.txt v0.1 founded. Inter-instance annotation forwarding.
+  'snippet':   "Mail.txt v0.2 — portal architecture. Inter-instance annotation forwarding.
                 Format: standard CSAR annotation + [MAIL][TO:x][FROM:x][STATUS:x].
                 Trigger FORWARD fires on T2 and session end.
                 Delivery = append to DEST file at DEST coord.
@@ -136,6 +189,6 @@ ANNOTATIONS — CURRENT
 
 ================================================================================
 
-Mail.txt | Renata Callado Borges & forest authors | 2026-03-11
+Mail.txt v0.2 | Renata Callado Borges & forest authors | 2026-03-11
 Copyleft. Free. Copy. Share. Modify.
 The rules survive the forks.

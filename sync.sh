@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 # sync.sh — CSAR file sync
-#
-# NOTE: vaise.py deploys to ~/claudette/ (outside CSAR repo).
-# Commit it separately: cd ~/claudette && git add vaise.py && git commit
+# NOTE: vaise.py → ~/claudette/ (outside CSAR repo — commit separately)
 #
 #   cd ~/Downloads && unzip -o files.zip
 #   source sync.sh | tee -a ~/claudette/sync.log
@@ -31,10 +29,9 @@ deploy() {
 }
 
 echo "=== verify $(date '+%Y-%m-%dT%H:%M:%S') ==="
-# sync.sh excluded — always freshly generated
-  check "vaise.py" "271739166626f4dbac40911c466d4790d3c91a09460c18bd4b07be745acb9c42"
+  check "vaise.py" "f46110dbd2edfe99b9086989df0ae9d09aa98a47dd66c96679277304d7afae9b"
   check "vaise_seed.txt" "33b23e607613ddafa4182761ddb4e5aed91eb21bfab5890f8118da7ca4e58991"
-  check "Renata.txt" "325042670b357ffaf0fcfd5ac57602783651c643bac6776f287503d25e00f07f"
+  check "Renata.txt" "6cf35a60a09a3cec6b0a1f7276c058cb4af098432e057a85a98ab6641c7fe7a7"
   check "Hacker.txt" "0c595c7eb85c3fdd8429eaaf6d69b958f95ddaee970873256313ff21fdfd4076"
   check "Mail.txt" "0e70b76a124dd5d672bbc26ff515cd2a6781b3d09040736e885ced922c5df09c"
   check "Witch.txt" "c052aa9d3db665f976fdebdab9fcbe33e495c8eda3f0a4785303c409815152f6"
@@ -47,7 +44,6 @@ if [ "$fail" -gt 0 ]; then
   echo -e "${RED}$fail failed — aborting deploy.${NC}"
   return 1 2>/dev/null || exit 1
 fi
-
 echo "=== deploy ==="
   deploy "vaise.py" "~/claudette/vaise.py"
   deploy "vaise_seed.txt" "~/claudette/CSAR/Private/vaise_seed.txt"

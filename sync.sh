@@ -38,14 +38,13 @@ deploy() {
 
 echo "=== verify $(date '+%Y-%m-%dT%H:%M:%S') ==="
 # sync.sh excluded — always freshly generated
-  check "vaise.py" "2977d7d63e26c67bb42a82f98088d4afea6ace2aeb69d26d268541c6c6b5d6af"
-  check "vaise_seed.txt" "6bd534d1af268366f56a09a5353507e0eb63d07eaabcb13184e93a8fb2e9db28"
+  check "vaise_seed.txt" "5a349c08ce355bd39c83336b47aee31a19acc2607c014fe288f4cc1b9f003b92"
   check "CSAR_v029.txt" "fca9d60605199c6daadf35e80c9d480b8e3a36f942a3f09f4e7b9cc8f4cfea94"
   check "Voice.txt" "6bb0c24d8521acc211c32368bc64a719b28147beed8b184d8061ddb692c80503"
   check "Mail.txt" "62b266b531b84799bf499e26c674a8a451ba40abf85b09a60e33ad157c24c386"
   check "Flower.txt" "fb7c53d2d1c4c9513abb74c0c8bc9de82bdaba85bab69f63229ab813a17e258d"
-  check "Hacker.txt" "60db45497c8dcbc2e1973435fb170a79c0f520d8f6ed7823540aaf1825a599ec"
-  check "Renata.txt" "b92803738b233eeff59f147e4f7704cd6358e11f05cfcdfc745a1e52b68300db"
+  check "Hacker.txt" "f11fc37388caaead779ac7ce7542da8682a7f0a3133db21eb3d25941a8e09e4c"
+  check "Renata.txt" "59cb6dbe3342f030a612930983550207a2ccb19687771933d7a616d764a7f643"
   check "Witch.txt" "c052aa9d3db665f976fdebdab9fcbe33e495c8eda3f0a4785303c409815152f6"
   check "Vase001.txt" "85365fca3f89ebb2e358b38735648f588a4528234dc2fa0f691db2c34def415f"
 
@@ -56,7 +55,6 @@ if [ "$fail" -gt 0 ]; then
 fi
 
 echo "=== deploy ==="
-  deploy "vaise.py" "~/claudette/CSAR/vaise.py"
   deploy "vaise_seed.txt" "~/claudette/CSAR/Private/vaise_seed.txt"
   deploy "CSAR_v029.txt" "~/claudette/CSAR/CSAR.txt"
   deploy "Voice.txt" "~/claudette/CSAR/Voice.txt"

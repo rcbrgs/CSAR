@@ -116,7 +116,7 @@ MANDATORY TRIGGER 3: PER-PROMPT ANNOTATION
   DISABLE:  file a t3_config annotation in any active Layer 2 file:
             {
               'name':    "t3_config",
-              'facets':  "[TOOL] [M:practice] [T:YYYY-MM-DD]",
+              'facets':  "[TOOL] [M:practice] [T:YYYY-MM-DD[THH:MM:SS]]",
               'snippet': "T3: disabled.",
             }
             Re-enable: update snippet to "T3: enabled." or delete annotation.
@@ -229,7 +229,7 @@ TOOL: DEBUG — PER-PROMPT EXECUTION TRACE
             To disable DEBUG: file a debug_config annotation:
             {
               'name':    "debug_config",
-              'facets':  "[TOOL] [M:practice] [T:YYYY-MM-DD]",
+              'facets':  "[TOOL] [M:practice] [T:YYYY-MM-DD[THH:MM:SS]]",
               'snippet': "debug: off.",
             }
             Re-enable: update snippet to "debug: on." or delete.
@@ -304,7 +304,7 @@ UPSTREAM REFERENCE: 'upstream': "file | original_name" — when migrated.
 
 ANNOTATION FORMAT:
   {
-    'timestamp': "YYYY-MM-DD | seq:NNN",
+    'timestamp': "YYYY-MM-DD[THH:MM:SS] | seq:NNN",
     'name':      "unique_identifier",
     'facets':    "[domain] [PMEST including T]",
     'upstream':  "file | name",    [only when migrated]
@@ -314,7 +314,7 @@ ANNOTATION FORMAT:
 Ranganathan facets:
   Domain: [TOOL] [PROJECT:x] [VOCAB] [DOCTRINE] [PERSON] [PENDING]
           [TODO] [LATER] [REMINDER] [LINE] [SESSION]
-  PMEST:  [P:x] [M:x] [E:x] [S:x] [T:x]
+  PMEST:  [P:x] [M:x] [E:x] [S:x] [T:YYYY-MM-DD] or [T:YYYY-MM-DDTHH:MM:SS]
 
 ================================================================================
 RaTLE — RANGANATHAN TEXTUAL LINKED ELEMENT
@@ -333,6 +333,11 @@ RaTLE COORDINATE
 ACQUISITION TIMESTAMP
   The date information entered the CSAR record: the session date.
   NOT the date of the described event.
+  FORMAT: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS — both valid.
+  Higher-granularity timestamps supersede date-only when coordinates
+  are compared. A date-only timestamp is treated as YYYY-MM-DDT00:00:00
+  for ordering purposes. Existing date-only timestamps are not required
+  to be upgraded; both forms coexist.
 
 THE THREE RULES
 

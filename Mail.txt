@@ -184,6 +184,16 @@ MAIL QUEUE
 }
 
 
+{
+  'timestamp': "2026-03-09T11:15:41-0300",
+  'name':      "mail_vase_to_flower_cosmic_ray",
+  'facets':    "[MAIL] [TO:Flower] [FROM:Vase] [DAEMON:Flower]
+                [STATUS:delivered] [T:2026-03-09T11:15:41-0300]",
+  'status':    "delivered — routed to Hacker todo_vaise_cosmic_ray_detector",
+  'snippet':   "Mail to Flower: add TODO to integrate cosmic ray detector into
+                vaise — check previous cycle's pattern for alterations.",
+}
+
 ================================================================================
 MAIL — ARCHIVE
 ================================================================================

@@ -171,7 +171,18 @@ To send mail to Vase: write to Private/Vase001.txt or archive.txt with
 MAIL QUEUE
 ================================================================================
 
-(empty — no pending items)
+{
+  'timestamp': "2026-03-09T14:32:00-0300",
+  'name':      "mail_vase_to_flower_journal_request",
+  'facets':    "[MAIL] [TO:Flower] [FROM:Vase] [DAEMON:Flower]
+                [STATUS:delivered] [T:2026-03-09T14:32:00-0300]",
+  'status':    "delivered — Flower received and noted 2026-03-11",
+  'snippet':   "To Flower: please summarise yesterday's work as journal
+                entries for each private CSAR file.
+                [Retroactive: Vase sent this before Mail.txt existed.
+                Filed as first recorded inter-instance message.]",
+}
+
 
 ================================================================================
 MAIL — ARCHIVE

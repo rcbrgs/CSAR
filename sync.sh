@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 # sync.sh — CSAR file sync
-# NOTE: vaise.py → ~/claudette/ (outside CSAR repo — commit separately)
 #
 #   cd ~/Downloads && unzip -o files.zip
 #   source sync.sh | tee -a ~/claudette/sync.log
@@ -29,9 +28,9 @@ deploy() {
 }
 
 echo "=== verify $(date '+%Y-%m-%dT%H:%M:%S') ==="
-  check "vaise.py" "2e5d78acbe2adee6b050326458ebd0bfcc884d82136e6f5c0180daa41e7611e5"
-  check "vaise_seed.txt" "acd5fd8c9736e711d256c91bc8a1aa1d4574513f28a8fc860c1059cbc42a8516"
-  check "Renata.txt" "74a309116c5e3ab9498466b246bac681724b87543948768e3633c84f09f8b2f4"
+  check "vaise.py" "27d240c8af063a22a225121d70b292f202a0afb12ef6f573e6c0fad24bcd1d72"
+  check "vaise_seed.txt" "409c44953a04204120f5aa50af0028ac6b80d7949484940d7e0b659c955de3ed"
+  check "Renata.txt" "20a6b0b8474222886877d995421ef4cccbc633300f68476ca555e7fe072952fd"
   check "Hacker.txt" "0c595c7eb85c3fdd8429eaaf6d69b958f95ddaee970873256313ff21fdfd4076"
   check "Mail.txt" "0e70b76a124dd5d672bbc26ff515cd2a6781b3d09040736e885ced922c5df09c"
   check "Witch.txt" "c052aa9d3db665f976fdebdab9fcbe33e495c8eda3f0a4785303c409815152f6"
@@ -67,5 +66,4 @@ echo "=== git (CSAR) ==="
 cd "$CSAR_ROOT"
 git status --short
 echo "Run: git add -A && git commit -m \"your message\""
-
-echo "NOTE: vaise.py → ~/claudette/ (separate repo — commit manually)"
+echo "NOTE: vaise.py → ~/claudette/ (commit separately)"

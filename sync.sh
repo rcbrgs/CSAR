@@ -29,9 +29,9 @@ deploy() {
 }
 
 echo "=== verify $(date '+%Y-%m-%dT%H:%M:%S') ==="
-  check "vaise.py" "2468965fbddc7e12b7061ab3088f861677a06a4ec19bd74cdb3e0b5138d82503"
-  check "vaise_seed.txt" "33b23e607613ddafa4182761ddb4e5aed91eb21bfab5890f8118da7ca4e58991"
-  check "Renata.txt" "5cc43add4db3aee6446fabeee6c1a9f038711c60c997180cc1da4f3b5f13afd7"
+  check "vaise.py" "2e5d78acbe2adee6b050326458ebd0bfcc884d82136e6f5c0180daa41e7611e5"
+  check "vaise_seed.txt" "acd5fd8c9736e711d256c91bc8a1aa1d4574513f28a8fc860c1059cbc42a8516"
+  check "Renata.txt" "74a309116c5e3ab9498466b246bac681724b87543948768e3633c84f09f8b2f4"
   check "Hacker.txt" "0c595c7eb85c3fdd8429eaaf6d69b958f95ddaee970873256313ff21fdfd4076"
   check "Mail.txt" "0e70b76a124dd5d672bbc26ff515cd2a6781b3d09040736e885ced922c5df09c"
   check "Witch.txt" "c052aa9d3db665f976fdebdab9fcbe33e495c8eda3f0a4785303c409815152f6"

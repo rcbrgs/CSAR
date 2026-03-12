@@ -1,3 +1,4 @@
 # Private instance files — local only
 Private/*
 !Private/.gitignore
+sync.sh

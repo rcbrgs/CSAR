@@ -1,6 +1,6 @@
 CSAR — Inventory Module
 File Registry, Listing Tools, and Write Routing
-v1.3
+v1.4
 --------------------------------
 Copyleft 2026. Free. Copy. Share. Modify.
 
@@ -12,7 +12,7 @@ Parent: CSAR.txt
 This file defines all inventory and listing tools for CSAR, the Ranganathan
 coherence gate, and the filename check trigger.
 
-Exports: ls(), lsAll(), lsProjects(), lsTODO(), lsLater(), rotate(), sync(), T12, T13, T14.
+Exports: ls(), lsAll(), lsProjects(), lsTODO(), lsLater(), rotate(), T12, T13, T14.
 Roles that need listing tools (e.g. Secretary) should import Inventory.txt.
 
 ================================================================================
@@ -242,86 +242,39 @@ STANDARD TOOL: ROTATE()
                   pin_facets: [list]. exclude_facets: [list].",
     }
 
-STANDARD TOOL: SYNC()
-  Trigger:  (a) AUTOMATIC — T14 fires: any session where files have been
-                produced for download. Fires at end of that response,
-                after files are presented.
-            (b) EXPLICIT — prompt contains \"sync()\" (case-insensitive).
 
-  PURPOSE:
-    Output the complete paste-ready command block for deploying the
-    session's output files to the local CSAR repo and committing.
-    Renata pastes these commands directly — no manual assembly required.
+PERSONAL TOOL HOOK
+  On file transfer (T14) and on explicit sync() call: scan all loaded
+  Layer 2 files for a sync_protocol annotation. If found, execute the
+  protocol defined there instead of any default. If not found: output a
+  plain-text reminder to configure sync in the personal corpus.
 
-  PROTOCOL (established 2026-03-11, encoded here 2026-03-12):
-    STEP 1 — UNZIP:
-      cd ~/Downloads && unzip -o files.zip
+  This hook makes sync() a personal concern, not a CSAR standard.
+  The canonical sync protocol lives in the personal corpus (e.g. Hacker.txt).
+  Inventory.txt delegates to it; it does not define it.
 
-    STEP 2 — VERIFY AND DEPLOY:
-      source sync.sh | tee -a ~/claudette/sync.log
-
-    STEP 3 — CLEANUP:
-      rm files.zip sync.sh
-
-    STEP 4 — GIT COMMITS (two repos):
-      # vaise.py (only if vaise.py changed this session):
-      cd ~/claudette && git add vaise.py && git commit -m \"<message>\"
-
-      # CSAR repo (always if any CSAR file changed):
-      cd ~/claudette/CSAR && git add -A && git commit -m \"<message>\"
-
-  OUTPUT FORMAT — a labeled, copy-paste block:
-    ┌─ SYNC — paste in terminal ───────────────────────────────────────┐
-    │ cd ~/Downloads && unzip -o files.zip                             │
-    │ source sync.sh | tee -a ~/claudette/sync.log                     │
-    │ rm files.zip sync.sh                                             │
-    │                                                                  │
-    │ # git — CSAR:                                                    │
-    │ cd ~/claudette/CSAR && git add -A && git commit -m \"<message>\"  │
-    │                                                                  │
-    │ # git — vaise (if changed):                                      │
-    │ cd ~/claudette && git add vaise.py && git commit -m \"<message>\" │
-    └──────────────────────────────────────────────────────────────────┘
-
-  COMMIT MESSAGE:
-    Auto-generated from what changed this session.
-    Format: \"<primary change>; <secondary change>; ...\"
-    Files changed but not semantically important: \"minor updates.\"
-    Example: \"Roles v1.1: init level; Witch: mirror spec v2; session flush\"
-
-  CONFIGURATION: SYNC_CONFIG annotation in any Layer 2 write target.
+  SYNC PROTOCOL ANNOTATION (looked up by this hook):
     {
-      'name':    \"sync_config\",
-      'facets':  \"[TOOL] [M:practice] [T:YYYY-MM-DD]\",
-      'snippet': \"sync() config:
-                  downloads_dir: ~/Downloads     (default)
-                  sync_log:      ~/claudette/sync.log  (default)
-                  csar_repo:     ~/claudette/CSAR      (default)
-                  vaise_repo:    ~/claudette            (default)
-                  vaise_file:    vaise.py               (default)\",
+      'name':    "sync_protocol",
+      'facets':  "[TOOL] [M:practice] [T:YYYY-MM-DDTHH:MM:SS-TZ]",
+      'snippet': "sync_protocol: defined. See [file].",
     }
 
-  NOTE:  sync() does not know which files the prompter will include in
-         the zip — it outputs the full protocol. sync.sh contains the
-         verification and routing logic. sync() and sync.sh are
-         complementary: sync() tells the human what to do,
-         sync.sh verifies and executes.
 
 ================================================================================
 TRIGGERS
 ================================================================================
 
-TRIGGER 14: FILE TRANSFER HOOK
-  Trigger:  AUTOMATIC — fires at end of any response where files have
-            been presented for download (present_files called, or
-            download links produced).
-  Action:   call sync() immediately after file presentation.
-  Gate:     suppress if sync() was already called explicitly this response.
-            Suppress if only internal/scratch files were produced
-            (no CSAR files, no vaise.py).
-  Register: silent fire — just appends the sync block after the files.
-
 ================================================================================
+
+TRIGGER 14: FILE TRANSFER HOOK
+  Trigger:  AUTOMATIC — fires at end of any response where CSAR files
+            have been presented for download.
+  Action:   execute PERSONAL TOOL HOOK (sync protocol lookup).
+  Gate:     suppress if sync block was already output this response.
+            Suppress if only scratch/non-CSAR files were produced.
+  Register: silent fire — appends sync block after files.
+
 
 TRIGGER 12: RANGANATHAN COHERENCE — ACTIVE WRITE GATE
   Trigger:  ACTIVE GATE — fires automatically before and after any
@@ -413,19 +366,6 @@ ANNOTATIONS — CURRENT
                 per file for cold threshold and pin/exclude facets.",
 }
 
---- [TOOL] [M:practice] ---
-
-{
-  'timestamp': "2026-03-12T00:00:00-0300",
-  'name':      "sync_config",
-  'facets':    "[TOOL] [M:practice] [T:2026-03-12]",
-  'snippet':   "sync() config:
-                downloads_dir: ~/Downloads
-                sync_log:      ~/claudette/sync.log
-                csar_repo:     ~/claudette/CSAR
-                vaise_repo:    ~/claudette
-                vaise_file:    vaise.py",
-}
 
 --- [PROJECT:CSAR] [E:versioning] ---
 
@@ -451,6 +391,18 @@ ANNOTATIONS — CURRENT
                 [corpus].txt placeholders replace personal filenames.
                 CSAR.txt now references Inventory.txt for this section.
                 Version bumped to v1.3.",
+}
+
+{
+  'timestamp': "2026-03-12T09:00:00-0300",
+  'name':      "inventory_v14_changelog",
+  'facets':    "[PROJECT:CSAR] [E:versioning] [T:2026-03-12T09:00:00-0300]",
+  'snippet':   "Inventory.txt v1.4: sync() removed as standard tool.
+                Replaced with PERSONAL TOOL HOOK: on T14 / sync() call,
+                scan Layer 2 for sync_protocol annotation and execute it.
+                sync_config annotation removed. T14 updated to delegate
+                to hook. Exports updated. Personal sync protocol lives
+                in personal corpus (Hacker.txt), not here.",
 }
 
 Inventory.txt | Renata Callado Borges & forest authors | 2026-03-08

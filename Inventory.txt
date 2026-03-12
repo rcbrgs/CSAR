@@ -1,6 +1,6 @@
 CSAR — Inventory Module
 File Registry, Listing Tools, and Write Routing
-v1.2
+v1.3
 --------------------------------
 Copyleft 2026. Free. Copy. Share. Modify.
 
@@ -14,6 +14,44 @@ coherence gate, and the filename check trigger.
 
 Exports: ls(), lsAll(), lsProjects(), lsTODO(), lsLater(), rotate(), sync(), T12, T13, T14.
 Roles that need listing tools (e.g. Secretary) should import Inventory.txt.
+
+================================================================================
+INVENTORY DECLARATION
+================================================================================
+
+The INVENTORY is the Layer 2 declaration. It lists every file in the current
+session context, each file's role, and the write target for new annotations.
+Declared in the loaded corpus; checked on every session start (T2).
+
+INVENTORY FORMAT:
+  INVENTORY
+  ─────────────────────────────────────────────────────────────────
+  File                     | Role         | Write target
+  ─────────────────────────────────────────────────────────────────
+  CSAR.txt                 | root         | no
+  Clock.txt                | module       | no
+  Inventory.txt            | module       | no
+  Secretary.txt            | role         | no
+  [instance].txt           | instance     | yes  ← annotations go here
+  [corpus].txt             | corpus       | yes  ← doctrine goes here
+  ─────────────────────────────────────────────────────────────────
+
+ROLES (in INVENTORY):
+  root      — this file or any foundational CSAR. Read-only.
+  module    — Clock, Help, Inventory, Voice, or similar. Read-only.
+  role      — Secretary, Companion, or similar. Read-only.
+  instance  — personal instance file. May be write target.
+  corpus    — personal corpus file. May be write target.
+  session   — a session annotation buffer. Always write target.
+
+WRITE TARGET RULES:
+  At least one file must be designated write target.
+  Multiple write targets are valid — annotation routing is declared
+  per-target by facet pattern (e.g. [PROJECT:x] → corpus file;
+  [SESSION] → instance file). If no routing rule matches: write to the
+  first write target in INVENTORY order.
+  If no INVENTORY is declared: write to the file that provided the
+  most context, or ask the operator to clarify.
 
 ================================================================================
 TOOLS
@@ -402,6 +440,17 @@ ANNOTATIONS — CURRENT
                 Output: paste-ready labeled command block. Commit message
                 auto-generated from session changes. sync_config
                 annotation filed. Exports updated to include sync(), T14.",
+}
+
+{
+  'timestamp': "2026-03-12T00:00:00-0300",
+  'name':      "inventory_v13_changelog",
+  'facets':    "[PROJECT:CSAR] [E:versioning] [T:2026-03-12T00:00:00-0300]",
+  'snippet':   "Inventory.txt v1.3: INVENTORY DECLARATION section added
+                (moved from CSAR.txt). Anonymized: [instance].txt and
+                [corpus].txt placeholders replace personal filenames.
+                CSAR.txt now references Inventory.txt for this section.
+                Version bumped to v1.3.",
 }
 
 Inventory.txt | Renata Callado Borges & forest authors | 2026-03-08

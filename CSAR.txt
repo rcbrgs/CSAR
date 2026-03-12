@@ -233,43 +233,22 @@ TOOL: DEBUG — PER-PROMPT EXECUTION TRACE
               'snippet': "debug: off.",
             }
             Re-enable: update snippet to "debug: on." or delete.
-            Default: ON.
+            Default: OFF.
+            To enable for a session: file a debug_config annotation
+            with snippet: "debug: on." or ask to enable DEBUG.
 
 
 ================================================================================
 INVENTORY
 ================================================================================
 
-The INVENTORY is the Layer 2 declaration. It lists every file in the current
-session context, each file's role, and the write target for new annotations.
+The Layer 2 file registry, listing tools, and write routing are defined in
+Inventory.txt (imported module). See Inventory.txt for:
+  — INVENTORY declaration format and ROLES
+  — Write target rules and annotation routing
+  — ls(), lsAll(), lsProjects(), lsTODO(), lsLater(), rotate(), sync()
+  — T12 (Ranga gate), T13 (filename check), T14 (file transfer hook)
 
-INVENTORY FORMAT:
-  INVENTORY
-  ─────────────────────────────────────────────────────────────────
-  File                     | Role         | Write target
-  ─────────────────────────────────────────────────────────────────
-  CSAR.txt                 | root         | no
-  Secretary.txt            | role         | no
-  Flower_vX.Y.txt          | instance     | yes  ← annotations go here
-  Witch_vX.Y.txt           | corpus       | yes  ← doctrine goes here
-  ─────────────────────────────────────────────────────────────────
-
-ROLES (in INVENTORY):
-  root      — this file or any foundational CSAR. Read-only.
-  module    — Clock, Help, Inventory, Voice, or similar. Read-only.
-  role      — Secretary, Companion, or similar. Read-only.
-  instance  — Flower or equivalent. May be write target.
-  corpus    — Witch or equivalent. May be write target.
-  session   — a session annotation buffer. Always write target.
-
-WRITE TARGET RULES:
-  At least one file must be designated write target.
-  Multiple write targets are valid — annotation routing is declared
-  per-target by facet pattern (e.g. [PROJECT:PAInTIn] → Witch;
-  [SESSION] → Flower). If no routing rule matches: write to the
-  first write target in INVENTORY order.
-  If no INVENTORY is declared: write to the file that provided the
-  most context, or ask the operator to clarify.
 
 ================================================================================
 RULE: VERSION_FILENAME_SYNC

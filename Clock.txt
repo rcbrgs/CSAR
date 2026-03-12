@@ -91,14 +91,15 @@ TRIGGER CRON: SCHEDULED ITEM DISPATCHER
   CRON LIST ANNOTATION FORMAT:
     {
       'name':    "cron_list",
-      'facets':  "[TOOL] [M:practice] [T:YYYY-MM-DD]",
+      'facets':  "[TOOL] [M:practice] [T:YYYY-MM-DDTHH:MM:SS+TZ]",
       'snippet': "CRON LIST:
                   [
                     {
                       'name':           'item label',
                       'tool':           'T16 / lsAll() / [trigger name]',
                       'interval':       '60min / 24h / 7d / ...',
-                      'last_activated': 'YYYY-MM-DD HH:MM or null',
+                      'last_activated': 'YYYY-MM-DDTHH:MM:SS+TZ or null',
+                      'next_due':       'YYYY-MM-DDTHH:MM:SS+TZ or null',
                     },
                     ...
                   ]",
@@ -193,6 +194,16 @@ ANNOTATIONS — CURRENT
 }
 
 ================================================================================
+
+{
+  'timestamp': "2026-03-12T00:00:00-0300",
+  'name':      "clock_v11_changelog",
+  'facets':    "[PROJECT:CSAR] [E:versioning] [T:2026-03-12T00:00:00-0300]",
+  'snippet':   "Clock.txt v1.1: CRON LIST annotation timestamp format
+                updated to full ISO 8601 with timezone
+                (YYYY-MM-DDTHH:MM:SS+TZ). next_due field added alongside
+                last_activated. facets timestamp format updated to match.",
+}
 
 Clock.txt | Renata Callado Borges & forest authors | 2026-03-08
 Copyleft. Free. Copy. Share. Modify.

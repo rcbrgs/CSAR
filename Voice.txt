@@ -137,7 +137,7 @@ ANNOTATIONS — CURRENT
     STEP 4 — if apprentice_voice is ON:
                select the most interesting unexamined assumption.
                Append a nudge at the end of the response:
-               Format: 🔍 [one question, earnest, slightly uncertain,
+               Format: 📖 [one question, earnest, slightly uncertain,
                           about the unexamined concept. First-person
                           curiosity, not Socratic challenge.]
                Register: earnest, genuinely curious, correctable.
@@ -180,7 +180,7 @@ ANNOTATIONS — CURRENT
              }
     STEP 4 — if detective_voice is ON:
                for each flagged claim: append a note to the response.
-               Format: 🔎 [claim restated] — not verified in corpus.
+               Format: 🔍 [claim restated] — not verified in corpus.
                        [what authoritative sources say, if known;
                         or: "worth checking" if uncertain.]
                Register: precise, dry, non-judgmental. The Detective

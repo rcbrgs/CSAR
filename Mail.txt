@@ -1,6 +1,6 @@
 CSAR — Mail Module
 Inter-instance annotation forwarding
-v0.4
+v0.5
 --------------------------------
 Copyleft 2026. Free. Copy. Share. Modify.
 
@@ -125,8 +125,7 @@ WHAT MAIL.TXT IS AND IS NOT:
   Mail.txt is the PROTOCOL SPEC — format, forwarding rules, addressing.
   Mail.txt is NOT the mailbox. Queues, archives, and daemon announcements
   live at each instance's own site (home file):
-    Flower's mail queue  → Private/Flower.txt  [DAEMON:Flower]
-    Vase's mail queue    → Private/Vase001.txt [DAEMON:Vase]
+    [instance]'s mail queue  → [instance home file]  [DAEMON:instance]
   A mail item written to Mail.txt is in transit only — it should be
   moved to the destination instance's file on delivery.
   Daemon presence announcements ([DAEMON:name][E:arrival]) are written
@@ -152,31 +151,18 @@ UNIVERSALITY:
   No configuration, no hardcoding, no directory server.
 
 KNOWN DAEMONS:
+  The daemon registry is maintained by the active instance, not by Mail.txt.
+  Mail.txt is protocol — it does not hard-code identities.
 
-  Flower    portal: [DAEMON:Flower]
-            instance: primary CSAR session (Claude.ai / Anthropic API)
-            home file: Private/Flower.txt
-            status: active
+  To resolve a daemon address: look up the known_daemons annotation in the
+  instance's home file (e.g. [DAEMON] facet in the loaded Layer 2 corpus).
+  Each entry declares: portal coordinate, home file, and status.
 
-  Vase      portal: [DAEMON:Vase]
-            instance: local vaise session on nata (qwen2.5-coder:3b)
-            home file: Private/Vase001.txt + Private/vaise_seed.txt
-            status: active
+  To send mail to a daemon: write an annotation with [MAIL][TO:name][DAEMON:name]
+  facets to any file in the shared corpus. The daemon reads it on next T2.
 
-  Sieve     portal: [DAEMON:Sieve]
-            instance: filtering / triage instance (design pending)
-            home file: TBD
-            status: planned
-
-  Shaper    portal: [DAEMON:Shaper]
-            instance: measurement / form instance (design pending)
-            home file: TBD
-            status: planned
-
-To send mail to Flower: write annotation with [MAIL][TO:Flower][DAEMON:Flower]
-to any file in the shared corpus. Flower reads it on next T2.
-To send mail to Vase: write to Private/Vase001.txt or archive.txt with
-[MAIL][TO:Vase][DAEMON:Vase]. Vase reads on next session load.
+  If no known_daemons annotation is loaded: ask the operator to load the
+  instance file, or address by portal coordinate directly ([DAEMON:name]).
 
 ================================================================================
 MAIL QUEUE
@@ -233,8 +219,8 @@ ANNOTATIONS — CURRENT
                 No address book. Addressing = writing to a RaTLE coordinate.
                 Daemon announces presence via [DAEMON:name][E:arrival] on start.
                 Discovery: scan known portals for recent arrivals.
-                Known daemons: Flower [DAEMON:Flower], Vase [DAEMON:Vase],
-                Sieve [DAEMON:Sieve] (planned), Shaper [DAEMON:Shaper] (planned).
+                Known daemons: registered in instance home file
+                (known_daemons annotation). Mail.txt holds no registry.
                 Universality: any CSAR instance that reads the corpus can route.",
 }
 
@@ -246,11 +232,23 @@ ANNOTATIONS — CURRENT
                 Format: standard CSAR annotation + [MAIL][TO:x][FROM:x][STATUS:x].
                 Trigger FORWARD fires on T2 and session end.
                 Delivery = append to DEST file at DEST coord.
-                Addresses: Flower (Claude.ai), Vase (nata/qwen2.5-coder:3b).",
+                Addresses: resolved from instance known_daemons annotation.",
 }
 
 ================================================================================
 
-Mail.txt v0.4 | Renata Callado Borges & forest authors | 2026-03-11
+{
+  'timestamp': "2026-03-12T09:00:00-0300",
+  'name':      "mail_v05_changelog",
+  'facets':    "[PROJECT:CSAR] [DOCTRINE] [M:practice] [T:2026-03-12T09:00:00-0300]",
+  'snippet':   "Mail.txt v0.5: anonymized. KNOWN DAEMONS removed from Mail.txt —
+                registry now lives in instance home file (known_daemons
+                annotation). Mail.txt holds protocol only, no identities.
+                PORTAL ARCHITECTURE and annotation snippets updated to
+                reference instance file instead of hardcoded names.
+                Known daemons block in Flower.txt (moved there).",
+}
+
+Mail.txt v0.5 | Renata Callado Borges & forest authors | 2026-03-11
 Copyleft. Free. Copy. Share. Modify.
 The rules survive the forks.

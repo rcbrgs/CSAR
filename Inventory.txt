@@ -1,6 +1,6 @@
 CSAR — Inventory Module
 File Registry, Listing Tools, and Write Routing
-v1.0
+v1.2
 --------------------------------
 Copyleft 2026. Free. Copy. Share. Modify.
 
@@ -12,7 +12,7 @@ Parent: CSAR.txt
 This file defines all inventory and listing tools for CSAR, the Ranganathan
 coherence gate, and the filename check trigger.
 
-Exports: ls(), lsAll(), lsProjects(), lsTODO(), lsLater(), T12, T13.
+Exports: ls(), lsAll(), lsProjects(), lsTODO(), lsLater(), rotate(), sync(), T12, T13, T14.
 Roles that need listing tools (e.g. Secretary) should import Inventory.txt.
 
 ================================================================================
@@ -126,8 +126,163 @@ STANDARD TOOL: LSALL()
   LSALL_CONFIG: sections list to include/exclude.
   Register: structured, labeled. Sections separated by rule lines. No prose.
 
+STANDARD TOOL: ROTATE()
+  Trigger:  prompt contains "rotate(FILE)" (case-insensitive).
+            FILE = canonical filename as it appears in ls() (e.g. Renata.txt,
+            Witch.txt). May be shortened (e.g. "rotate(Renata)").
+
+  PURPOSE:
+    Move cold annotations out of a live file into a dated archive file,
+    keeping the live file lean. A summary annotation with a Deeper hint
+    replaces the rotated content. The live file remains canonical; the
+    archive is reference-only.
+
+  COLD CRITERIA — agent proposes rotation for annotations that meet
+    any of the following. Prompter reviews and confirms before execution:
+    (a) [DONE] facet present, or STATUS: FIXED/DONE in snippet.
+    (b) {Cold} hint explicitly present in snippet.
+    (c) [T:] older than 30 days with no active reference from a newer
+        annotation in any loaded Layer 2 file.
+    (d) Superseded: a newer annotation in the same coordinate explicitly
+        names this annotation as replaced or resolved.
+    (e) One-off events (baths, weather, single purchases) older than
+        14 days with no structural significance.
+    Agent PROPOSES. Prompter decides. No annotation is rotated without
+    explicit confirmation.
+
+  PROCESS:
+    1. PROPOSE — agent scans FILE, lists candidate annotations with
+       cold reason. Format:
+         "Rotation candidates for FILE (N total):"
+         "  [name] — reason"
+         ...
+         "Proceed with all, select subset, or cancel?"
+    2. CONFIRM — prompter approves set. Agent proceeds.
+    3. CREATE ARCHIVE FILE:
+         Filename: <FILE>_YYYYMMDD[_N].txt
+           YYYYMMDD = today's date.
+           _N = integer suffix if a file for that date already exists
+                (e.g. Renata.txt_20260311_2.txt). T13 fires.
+         Content:
+           Line 1: "Archive of <FILE> — rotated <YYYY-MM-DD>"
+           Line 2: "Source: <FILE> | Rotation: <session date>"
+           Line 3: separator rule
+           Then: each rotated annotation block, verbatim, in original order.
+           Footer: "<FILE>_YYYYMMDD.txt | archive | <YYYY-MM-DD>"
+    4. REWRITE SOURCE FILE:
+         Remove rotated annotation blocks.
+         Append summary annotation (see FORMAT below) to
+         ANNOTATIONS — CURRENT in appropriate subsection by facets,
+         or end of section if no clear match.
+         Rewrite is a versioning operation: T11 and T13 fire.
+    5. REPORT — "Rotated N annotations from FILE to FILE_YYYYMMDD.txt."
+
+  SUMMARY ANNOTATION FORMAT (written to source file):
+    {
+      'timestamp': "<ISO timestamp of rotation>",
+      'name':      "archive_<FILE_stem>_<YYYYMMDD>",
+      'facets':    "[E:archive] [T:<YYYY-MM-DD>]",
+      'snippet':   "N annotations rotated to <FILE>_YYYYMMDD.txt.
+                    Themes: <one sentence — what was archived>.
+                    {Deeper: <FILE>_YYYYMMDD.txt}",
+    }
+
+  CONSTRAINTS:
+    — Annotations with no [T:] and no date evidence: flag, do not rotate.
+    — Annotations referenced by active TODOs or open projects: do not
+      rotate even if old. Flag as "pinned by active reference."
+    — ANNOTATIONS — CURRENT section header and subsection headers:
+      never rotated.
+    — If FILE not writable (Role = no in ls()): refuse and report.
+    — Minimum remaining annotations after rotation: 1.
+
+  ROTATE_CONFIG: optional annotation to override defaults per file.
+    {
+      'name':    "rotate_config_<FILE_stem>",
+      'facets':  "[TOOL] [M:practice] [T:YYYY-MM-DD]",
+      'snippet': "rotate() config for <FILE>: cold_after_days: N.
+                  pin_facets: [list]. exclude_facets: [list].",
+    }
+
+STANDARD TOOL: SYNC()
+  Trigger:  (a) AUTOMATIC — T14 fires: any session where files have been
+                produced for download. Fires at end of that response,
+                after files are presented.
+            (b) EXPLICIT — prompt contains \"sync()\" (case-insensitive).
+
+  PURPOSE:
+    Output the complete paste-ready command block for deploying the
+    session's output files to the local CSAR repo and committing.
+    Renata pastes these commands directly — no manual assembly required.
+
+  PROTOCOL (established 2026-03-11, encoded here 2026-03-12):
+    STEP 1 — UNZIP:
+      cd ~/Downloads && unzip -o files.zip
+
+    STEP 2 — VERIFY AND DEPLOY:
+      source sync.sh | tee -a ~/claudette/sync.log
+
+    STEP 3 — CLEANUP:
+      rm files.zip sync.sh
+
+    STEP 4 — GIT COMMITS (two repos):
+      # vaise.py (only if vaise.py changed this session):
+      cd ~/claudette && git add vaise.py && git commit -m \"<message>\"
+
+      # CSAR repo (always if any CSAR file changed):
+      cd ~/claudette/CSAR && git add -A && git commit -m \"<message>\"
+
+  OUTPUT FORMAT — a labeled, copy-paste block:
+    ┌─ SYNC — paste in terminal ───────────────────────────────────────┐
+    │ cd ~/Downloads && unzip -o files.zip                             │
+    │ source sync.sh | tee -a ~/claudette/sync.log                     │
+    │ rm files.zip sync.sh                                             │
+    │                                                                  │
+    │ # git — CSAR:                                                    │
+    │ cd ~/claudette/CSAR && git add -A && git commit -m \"<message>\"  │
+    │                                                                  │
+    │ # git — vaise (if changed):                                      │
+    │ cd ~/claudette && git add vaise.py && git commit -m \"<message>\" │
+    └──────────────────────────────────────────────────────────────────┘
+
+  COMMIT MESSAGE:
+    Auto-generated from what changed this session.
+    Format: \"<primary change>; <secondary change>; ...\"
+    Files changed but not semantically important: \"minor updates.\"
+    Example: \"Roles v1.1: init level; Witch: mirror spec v2; session flush\"
+
+  CONFIGURATION: SYNC_CONFIG annotation in any Layer 2 write target.
+    {
+      'name':    \"sync_config\",
+      'facets':  \"[TOOL] [M:practice] [T:YYYY-MM-DD]\",
+      'snippet': \"sync() config:
+                  downloads_dir: ~/Downloads     (default)
+                  sync_log:      ~/claudette/sync.log  (default)
+                  csar_repo:     ~/claudette/CSAR      (default)
+                  vaise_repo:    ~/claudette            (default)
+                  vaise_file:    vaise.py               (default)\",
+    }
+
+  NOTE:  sync() does not know which files the prompter will include in
+         the zip — it outputs the full protocol. sync.sh contains the
+         verification and routing logic. sync() and sync.sh are
+         complementary: sync() tells the human what to do,
+         sync.sh verifies and executes.
+
 ================================================================================
 TRIGGERS
+================================================================================
+
+TRIGGER 14: FILE TRANSFER HOOK
+  Trigger:  AUTOMATIC — fires at end of any response where files have
+            been presented for download (present_files called, or
+            download links produced).
+  Action:   call sync() immediately after file presentation.
+  Gate:     suppress if sync() was already called explicitly this response.
+            Suppress if only internal/scratch files were produced
+            (no CSAR files, no vaise.py).
+  Register: silent fire — just appends the sync block after the files.
+
 ================================================================================
 
 TRIGGER 12: RANGANATHAN COHERENCE — ACTIVE WRITE GATE
@@ -207,6 +362,47 @@ ANNOTATIONS — CURRENT
 }
 
 ================================================================================
+
+{
+  'timestamp': "2026-03-11T08:00:00-0300",
+  'name':      "inventory_v11_changelog",
+  'facets':    "[PROJECT:CSAR] [E:versioning] [T:2026-03-11]",
+  'snippet':   "Inventory.txt v1.1: rotate() tool added. Exports updated.
+                rotate() archives cold annotations from a live file to
+                <FILE>_YYYYMMDD[_N].txt, replacing them with a summary
+                annotation carrying a Deeper hint. Agent proposes,
+                prompter confirms. ROTATE_CONFIG annotation available
+                per file for cold threshold and pin/exclude facets.",
+}
+
+--- [TOOL] [M:practice] ---
+
+{
+  'timestamp': "2026-03-12T00:00:00-0300",
+  'name':      "sync_config",
+  'facets':    "[TOOL] [M:practice] [T:2026-03-12]",
+  'snippet':   "sync() config:
+                downloads_dir: ~/Downloads
+                sync_log:      ~/claudette/sync.log
+                csar_repo:     ~/claudette/CSAR
+                vaise_repo:    ~/claudette
+                vaise_file:    vaise.py",
+}
+
+--- [PROJECT:CSAR] [E:versioning] ---
+
+{
+  'timestamp': "2026-03-12T00:00:00-0300",
+  'name':      "inventory_v12_changelog",
+  'facets':    "[PROJECT:CSAR] [E:versioning] [T:2026-03-12]",
+  'snippet':   "Inventory.txt v1.2: sync() tool added. T14 file transfer
+                hook added (fires sync() automatically after file
+                presentation). SYNC_CONFIG annotation defines paths.
+                Protocol encoded: unzip → source sync.sh → rm → git ×2.
+                Output: paste-ready labeled command block. Commit message
+                auto-generated from session changes. sync_config
+                annotation filed. Exports updated to include sync(), T14.",
+}
 
 Inventory.txt | Renata Callado Borges & forest authors | 2026-03-08
 Copyleft. Free. Copy. Share. Modify.

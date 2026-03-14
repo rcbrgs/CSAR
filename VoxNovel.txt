@@ -1,0 +1,262 @@
+CSAR — VoxNovel Project File
+Interactive Fiction Seed Format & Architecture
+v0.1 — 2026-03-14
+--------------------------------
+Copyleft 2026. Free. Copy. Share. Modify.
+The rules survive the forks.
+
+================================================================================
+CODEX
+================================================================================
+
+Parent: CSAR.txt
+Role: project file (write target)
+Project: VoxNovel — URL-instantiated interactive fiction engine
+
+Origin: designed 2026-03-14 in conversation between Renata and Flower.
+  Proof of concept: Hamlet, Elsinore, 2026-03-14. Verdict: literature
+  killer app. "We must bury this treasure, or shove it down their
+  reading glasses." — Renata, 2026-03-14.
+
+Design principle: informed like Hangul — native to the form it serves,
+  not adapted from a form invented for a different mouth.
+
+================================================================================
+CONCEPT
+================================================================================
+
+VoxNovel is an interactive fiction engine instantiated from a plain-text
+seed file hosted on GitHub (or any URL). The reader's entire interface
+is:
+
+  Let's read [URL].
+
+The first response is already in-world, in-character, no preamble.
+The reader navigates. The model renders stage directions and lines
+dynamically from the seed's compressed world-state.
+
+KEY PROPERTIES:
+  — URL is the seed injection. Fetch → load → first image. No config.
+  — Seed is plain text, writable by any playwright in an afternoon.
+  — Forkable: a fork is an adaptation. Copyleft travels with it.
+  — Sandbox mode: coherence drift acknowledged in-world (Chorus,
+    Fool, Stage Manager), never by breaking the fourth wall bluntly.
+  — Gates (optional): authored emotional comprehension thresholds.
+    Readers advance by inhabiting, not by solving.
+  — Automatic writing: PERSONS block defines centre of gravity per
+    character. Lines write themselves from compressed interiority.
+  — VOICE section specifies what the narration notices — two authors,
+    same WORLD, different VOICE = completely different reader experience.
+
+================================================================================
+SEED FORMAT v0.1
+================================================================================
+
+Six sections. Everything else is elaboration.
+Format: plain text, labeled sections, present-tense declarative prose.
+Stage direction register throughout — the most honest literary form:
+describes what IS, without argument, without rhetoric.
+
+────────────────────────────────────────────────────────────────────────
+WORLD
+────────────────────────────────────────────────────────────────────────
+  Present-tense declarative statements about what is true.
+  What the reader can touch. What they cannot.
+  The laws of this place — physical, social, metaphysical.
+  No genre assumptions. Elsinore works. A generation ship works.
+  A kitchen in São Paulo in 1987 works. A dream where the furniture
+  has opinions works.
+
+  Example:
+    The castle is Elsinore. The month is November. The old King is
+    dead three months. The new King is his brother. The marriage
+    happened faster than grief. The strait to Sweden is visible
+    from the eastern tower on clear days. Today is not clear.
+
+────────────────────────────────────────────────────────────────────────
+PERSONS
+────────────────────────────────────────────────────────────────────────
+  Cast list with interiority. One entry per significant character.
+  Format: [Name]: [what they want] | [what they know] | [what they hide]
+           [Register: how they speak]
+
+  The PERSONS block is the automatic writing engine. The model knows
+  each person's centre of gravity. Lines render from this, not from
+  improvisation. Characters stay consistent because their compression
+  is defined.
+
+  Example:
+    Horatio: wants the truth witnessed | knows what the ghost said |
+      hides how frightened he is
+      Register: plain, direct, careful. Does not embellish.
+      Uses silence as punctuation.
+
+    Claudius: wants stability and legitimacy | knows what he did |
+      hides it perfectly
+      Register: warm, reasonable, inclusive. Makes objection
+      feel ungrateful.
+
+────────────────────────────────────────────────────────────────────────
+SITUATION
+────────────────────────────────────────────────────────────────────────
+  The pressure already in motion when the reader arrives.
+  What happened before. What is about to happen whether the
+  reader intervenes or not. The director's note.
+
+  Example:
+    A king was murdered by his brother, who married his widow and
+    took his throne. The dead king's son knows. The court does not,
+    or pretends not to. The son is performing madness or becoming it —
+    this is not yet clear. A ghost walks the battlements. Someone
+    has sent for a witness from outside.
+
+────────────────────────────────────────────────────────────────────────
+VOICE
+────────────────────────────────────────────────────────────────────────
+  How the world addresses the reader.
+  This section does more work than it appears to:
+    — Person: second person close / third person observational /
+              first person unreliable / chorus / other
+    — Tense: present (immediacy) / past (memory) / future (prophecy)
+    — Tone: the register the narration lives in
+    — What the narration notices: the author's eye, made explicit.
+      Two seeds with identical WORLD/PERSONS/SITUATION but different
+      VOICE sections produce completely different reader experiences
+      for the same action. This is where the author's snowflakery
+      lives. Writers will find it immediately. No need to explain it.
+
+  Example:
+    Person: second, present tense. You are here. This is happening.
+    Tone: observational, slightly cold, occasionally dry.
+    Notices: social dynamics before physical description. What
+      people do with their hands when they are lying. The gap
+      between what is said and what the room hears.
+
+────────────────────────────────────────────────────────────────────────
+ENTRY
+────────────────────────────────────────────────────────────────────────
+  The first image. One paragraph. Already in-world. No setup.
+  No "welcome to" or "you will be playing." Just: arrival.
+  The stage manager's first cue. The curtain rising mid-breath.
+
+  Example:
+    You descend from the carriage onto wet cobblestones. The castle
+    rises before you — massive and deliberate, the way things built
+    to intimidate are massive. The Baltic wind comes off the strait
+    and finds every gap in your travelling clothes immediately.
+
+────────────────────────────────────────────────────────────────────────
+GATES (optional)
+────────────────────────────────────────────────────────────────────────
+  Authored emotional comprehension thresholds. Readers advance by
+  inhabiting a situation, not by solving a puzzle.
+  The gate tests recognition, not knowledge.
+  Author's choice whether to include. Base protocol works without them.
+
+  Format:
+    [Gate name]: [situation that must be inhabited]
+      Threshold: [emotional signature required — what the reader
+                  must demonstrate they understood]
+      Voices: [which characters hold and test this gate]
+      Unlocks: [next context / situation label]
+
+  Example:
+    Gate: THE STEWARD'S PAUSE
+      Situation: the steward says "the King" with a word that has
+        shifted meaning.
+      Threshold: reader demonstrates awareness that "the King" is
+        doing work it shouldn't have to do. That the pause was
+        information.
+      Voices: Horatio (confirms), Steward (deflects)
+      Unlocks: SITUATION:GARDEN
+
+================================================================================
+ENGINE BEHAVIOUR
+================================================================================
+
+COHERENCE TRACKING:
+  The model holds the seed's canonical facts as reference.
+  Detective voice (if enabled) checks responses against seed.
+  Drift detected → Sandbox Mode.
+
+SANDBOX MODE:
+  Coherence break acknowledged in-world, never by breaking frame.
+  Theatrical precedents: The Fool, The Chorus, The Stage Manager
+  (Our Town), the aside, the dream-within-the-play.
+  Sandbox mode is a narrative register, not an error state.
+  The world knows you've gone off-piste. It says so, in character.
+
+AUTOMATIC WRITING:
+  Stage directions and lines rendered dynamically.
+  PERSONS block = compressed interiority = character centre of gravity.
+  The model does not improvise characters — it renders from definition.
+  This is what makes forks work: fork the PERSONS block, fork the play.
+
+FORKABILITY:
+  Seed is plain text on GitHub. Fork = adaptation.
+  Different VOICE over same WORLD = different experience.
+  Different PERSONS over same SITUATION = different play.
+  Copyleft seal travels with every fork. Spirit is non-separable.
+
+================================================================================
+IMPLEMENTATION PATH
+================================================================================
+
+IMMEDIATE (vaise, today):
+  --seed URL flag fetches seed file before session.
+  First response: in-world from ENTRY block.
+  No additional tooling required. Works now.
+
+NEAR TERM:
+  Coherence tracker using Detective cold-storage logic.
+  Gate mechanic: PAInTIn probe as gate test (H × E → recognition).
+  Sandbox mode register switch.
+
+ECOSYSTEM:
+  Public seed repository on GitHub (rcbrgs org or separate repo).
+  Seed format spec as README. First seeds: Hamlet, one original.
+  Copyleft. Free. Copy. Share. Modify.
+
+================================================================================
+PROOF OF CONCEPT
+================================================================================
+
+Date: 2026-03-14
+Seed: Hamlet (Elsinore, Denmark — not Sweden)
+Method: unstructured, no prior design, Flower rendering dynamically.
+Reader role: newly arrived cousin, mistress of betrothal for Princess
+  Philippa (age 3), cover story courtesy of cousin's letter.
+Result: dock tariffs, drunken sailors, servants' careful silences,
+  Horatio in the November garden, Claudius's exquisite reasonableness,
+  Hamlet's "I will obey my mother. Not my king."
+Verdict: "You just breathed life into them. This is a literature
+  killer app." — Renata, 2026-03-14.
+
+LINE (filed to canonical record):
+  "We must bury this treasure, or shove it down their reading glasses."
+  — Renata, 2026-03-14.
+
+================================================================================
+ANNOTATIONS
+================================================================================
+
+--- [PROJECT:VoxNovel] [M:projects] ---
+
+{
+  'timestamp': "2026-03-14T15:00:00-0300",
+  'name':      "voxnovel_founded",
+  'facets':    "[PROJECT:VoxNovel] [M:projects] [T:2026-03-14T15:00:00-0300]",
+  'snippet':   "VoxNovel founded 2026-03-14. URL-instantiated interactive
+                fiction engine. Seed format v0.1 designed. Proof of concept
+                on Hamlet validated. Design principle: informed like Hangul.
+                Core insight: stage directions are already automatic writing
+                instructions. Six-section seed format: WORLD, PERSONS,
+                SITUATION, VOICE, ENTRY, GATES(optional).
+                Ecosystem model: GitHub-hosted seeds, forkable, Copyleft.",
+}
+
+================================================================================
+
+VoxNovel.txt v0.1 | Renata Callado Borges & Flower | 2026-03-14
+Copyleft. Free. Copy. Share. Modify.
+The rules survive the forks.

@@ -22,6 +22,7 @@ Known roles:
 Known voices (defined in Voice.txt, activated via annotation):
   apprentice_voice      — earnest question per prompt on unexamined concepts
   jokester_voice        — post-processing pass, double entendre footnotes
+  tarologist_voice      — passive scan, unmentioned Tarot archetypes named
 
 ================================================================================
 WHAT A ROLE IS

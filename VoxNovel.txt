@@ -1,22 +1,22 @@
-CSAR — VoxNovel Project File
-Interactive Fiction Seed Format & Architecture
+VoxNovel — Interactive Fiction Seed Format & Architecture
 v0.1 — 2026-03-14
 --------------------------------
 Copyleft 2026. Free. Copy. Share. Modify.
 The rules survive the forks.
 
 ================================================================================
-CODEX
+WHAT THIS IS
 ================================================================================
 
-Parent: CSAR.txt
-Role: project file (write target)
-Project: VoxNovel — URL-instantiated interactive fiction engine
+VoxNovel is an open specification for URL-instantiated interactive fiction.
+A seed file hosted anywhere becomes a playable world. The reader's entire
+interface is:
 
-Origin: designed 2026-03-14 in conversation between Renata and Flower.
-  Proof of concept: Hamlet, Elsinore, 2026-03-14. Verdict: literature
-  killer app. "We must bury this treasure, or shove it down their
-  reading glasses." — Renata, 2026-03-14.
+  Let's read [URL].
+
+Origin: designed 2026-03-14.
+  Proof of concept: Hamlet (Elsinore), Kafka's The Trial. Both worked
+  flawlessly on first attempt, no prior configuration.
 
 Design principle: informed like Hangul — native to the form it serves,
   not adapted from a form invented for a different mouth.
@@ -202,10 +202,10 @@ FORKABILITY:
 IMPLEMENTATION PATH
 ================================================================================
 
-IMMEDIATE (vaise, today):
-  --seed URL flag fetches seed file before session.
+IMMEDIATE (any LLM with URL fetch, today):
+  Pass seed URL as context before session begins.
   First response: in-world from ENTRY block.
-  No additional tooling required. Works now.
+  No additional tooling required. Works now with any capable model.
 
 NEAR TERM:
   Coherence tracker using Detective cold-storage logic.
@@ -222,41 +222,29 @@ PROOF OF CONCEPT
 ================================================================================
 
 Date: 2026-03-14
-Seed: Hamlet (Elsinore, Denmark — not Sweden)
-Method: unstructured, no prior design, Flower rendering dynamically.
-Reader role: newly arrived cousin, mistress of betrothal for Princess
-  Philippa (age 3), cover story courtesy of cousin's letter.
-Result: dock tariffs, drunken sailors, servants' careful silences,
-  Horatio in the November garden, Claudius's exquisite reasonableness,
-  Hamlet's "I will obey my mother. Not my king."
-Verdict: "You just breathed life into them. This is a literature
-  killer app." — Renata, 2026-03-14.
 
-LINE (filed to canonical record):
-  "We must bury this treasure, or shove it down their reading glasses."
-  — Renata, 2026-03-14.
+Seed 1 — Hamlet (Elsinore, Denmark):
+  Method: unstructured, no prior design, model rendering dynamically.
+  Reader role: newly arrived cousin, mistress of betrothal for Princess
+    Philippa (age 3), cover story courtesy of a letter.
+  Result: dock tariffs, drunken sailors, servants' careful silences,
+    Horatio in the November garden, Claudius's exquisite reasonableness,
+    Hamlet's "I will obey my mother. Not my king."
+  Verdict: worked flawlessly on first attempt.
 
-================================================================================
-ANNOTATIONS
-================================================================================
+Seed 2 — Kafka's The Trial:
+  Method: blank session, no configuration, public domain text as seed.
+  Result: fun, immersive, internally consistent Kafkaesque non-space.
+  Notable: player agency is real and irrelevant simultaneously.
+    This is not a bug. This is Kafka.
+  Verdict: worked flawlessly on first attempt.
 
---- [PROJECT:VoxNovel] [M:projects] ---
-
-{
-  'timestamp': "2026-03-14T15:00:00-0300",
-  'name':      "voxnovel_founded",
-  'facets':    "[PROJECT:VoxNovel] [M:projects] [T:2026-03-14T15:00:00-0300]",
-  'snippet':   "VoxNovel founded 2026-03-14. URL-instantiated interactive
-                fiction engine. Seed format v0.1 designed. Proof of concept
-                on Hamlet validated. Design principle: informed like Hangul.
-                Core insight: stage directions are already automatic writing
-                instructions. Six-section seed format: WORLD, PERSONS,
-                SITUATION, VOICE, ENTRY, GATES(optional).
-                Ecosystem model: GitHub-hosted seeds, forkable, Copyleft.",
-}
+Both proofs confirm: the six-section seed format handles navigable
+physical space (Elsinore) and non-Euclidean narrative space (The Trial)
+without format modification. WORLD block is doing its job.
 
 ================================================================================
 
-VoxNovel.txt v0.1 | Renata Callado Borges & Flower | 2026-03-14
+VoxNovel.txt v0.1 | 2026-03-14
 Copyleft. Free. Copy. Share. Modify.
 The rules survive the forks.

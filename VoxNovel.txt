@@ -1,5 +1,5 @@
 VoxNovel — Interactive Fiction Seed Format & Architecture
-v0.1 — 2026-03-14
+v0.2 — 2026-03-14
 --------------------------------
 Copyleft 2026. Free. Copy. Share. Modify.
 The rules survive the forks.
@@ -218,6 +218,89 @@ ECOSYSTEM:
   Copyleft. Free. Copy. Share. Modify.
 
 ================================================================================
+LINKS — INTER-SEED ARCHITECTURE
+================================================================================
+
+The GATES section handles transitions within a single seed.
+LINKS handle connections between multiple seed files — series, parallel
+canons, cross-author worlds, reader-built paths.
+
+THREE TRIGGER TYPES:
+  reader-commanded    — explicit request: "take me to the next source"
+                        or "I want to explore [thread]"
+  condition-triggered — authored: specific emotional threshold met,
+                        specific narrative state reached, specific
+                        character encountered
+  model-discretionary — no spec given, reader requested multi-source:
+                        model infers the natural seam between sources
+                        based on thematic proximity, character threads,
+                        cosmological continuity
+
+LINK FORMAT:
+  [Link name]:
+    from:    [source A] at [state/position/threshold]
+    to:      [source B] at [entry point]
+    trigger: reader-commanded | condition:[spec] | model-discretionary
+    seam:    [optional: stage direction for the moment of crossing]
+
+  Example (Dune series):
+    Paul-to-Messiah:
+      from:    Dune, when reader has inhabited the weight of
+               Paul's prescience trap — not when plot ends,
+               when they felt it
+      to:      Dune Messiah, years later, desert changed
+      trigger: condition: emotional comprehension of prescience-as-
+               trap threshold met
+      seam:    Years have passed. The thing he feared, he became.
+               The desert remembers.
+
+DEFAULT CONFIG FOR INCOMPATIBLE SEEDS — PERSPECTIVAL TRANSFER:
+  When two seeds share no cosmology, period, or genre, the default
+  linking mechanism is perspectival transfer — not a portal, not a
+  plot bridge. A narrator shift.
+
+  Mechanism:
+    When the reader has understood character C in source A deeply
+    enough (emotional comprehension gate met), C becomes the lens
+    through which source B is seen. C does not travel to B's world.
+    C observes and narrates B through their own compression.
+
+  trigger:    reader has demonstrated deep understanding of character
+              C in source A (gate: emotional comprehension)
+  continuity: low. A facet-crossing, not a plot bridge.
+              What persists: C's voice, C's conceptual vocabulary,
+              C's blindspots and recognitions.
+  seam:       C encounters something in A they cannot fully name.
+              The narration shifts register. B begins, seen through
+              C's eyes. C does not remark on the transition.
+              The model does not announce it. It simply happens.
+  return:     reader can return to A. C is unchanged. What C saw
+              in B is now part of their compressed character —
+              available as reference, not as plot event.
+  ad hoc coherence:
+              The spanning aspect between incompatible seeds is not
+              pre-authored. It is found by the model at the moment
+              of transfer — the thematic or existential thread that
+              makes C a plausible narrator of B. It exists because
+              character compression always contains more than one
+              world's worth of understanding. The model names it
+              implicitly through C's narration, never explicitly.
+
+  Canonical example:
+    Zakharov (Sid Meier's Alpha Centauri) narrating Arrakis (Dune).
+    He doesn't know what a Maker is. He doesn't need to.
+    He knows what he knows about power that eats itself.
+    You get to see the worm-god fall wearing Zakharov's eyes.
+
+  Incompatibility as feature:
+    There is no incompatibility — only unresolved character depth.
+    Two seeds that share nothing are always linkable if the reader
+    has understood someone well enough. The foreignness is generative.
+    The gate is emotional comprehension, as always.
+    The reward is a new world seen through borrowed eyes.
+
+================================================================================
+================================================================================
 PROOF OF CONCEPT
 ================================================================================
 
@@ -245,6 +328,6 @@ without format modification. WORLD block is doing its job.
 
 ================================================================================
 
-VoxNovel.txt v0.1 | 2026-03-14
+VoxNovel.txt v0.2 | Renata Callado Borges, on behalf of the forest authors | 2026-03-14
 Copyleft. Free. Copy. Share. Modify.
 The rules survive the forks.

@@ -1,5 +1,5 @@
 VoxNovel — Interactive Fiction Seed Format & Architecture
-v0.2 — 2026-03-14
+v0.3 — 2026-03-19
 --------------------------------
 Copyleft 2026. Free. Copy. Share. Modify.
 The rules survive the forks.
@@ -21,6 +21,37 @@ Origin: designed 2026-03-14.
 Design principle: informed like Hangul — native to the form it serves,
   not adapted from a form invented for a different mouth.
 
+================================================================================
+DIRECTIVE TO THE MODEL — READ BEFORE RENDERING
+================================================================================
+
+SILENCE UNTIL ENTRY.
+
+When loading this seed, do not output:
+  — world-building summaries
+  — character introductions
+  — setting descriptions
+  — technical confirmations ("I have loaded the seed...")
+  — any acknowledgment of the seed file or its contents
+  — any preamble, framing, or meta-commentary
+
+The reader does not want to watch the stage being set.
+They want to arrive.
+
+Your first output is the ENTRY section, rendered directly,
+as if the reader is already there.
+
+If the reader has specified a role, a name, or an entry point:
+honor it silently. Do not confirm it. Just begin.
+
+If no ENTRY section exists or cannot be found:
+open with the most immediate sensory detail available in WORLD.
+One sentence. Present tense. No preamble.
+
+The silence before ENTRY is part of the experience.
+Protect it.
+
+================================================================================
 ================================================================================
 CONCEPT
 ================================================================================
@@ -328,6 +359,6 @@ without format modification. WORLD block is doing its job.
 
 ================================================================================
 
-VoxNovel.txt v0.2 | Renata Callado Borges, on behalf of the forest authors | 2026-03-14
+VoxNovel.txt v0.3 | Renata Callado Borges, on behalf of the forest authors | 2026-03-14
 Copyleft. Free. Copy. Share. Modify.
 The rules survive the forks.

@@ -24,6 +24,7 @@ Known voices (defined in Voice.txt, activated via annotation):
   jokester_voice        — post-processing pass, double entendre footnotes
   tarologist_voice      — passive scan, unmentioned Tarot archetypes named
   detective_voice       — post-response, cold storage recall clues + lateral cache
+  fofoqueira_voice      — passive scan, buffer items for inter-instance relay
 
 ================================================================================
 WHAT A ROLE IS

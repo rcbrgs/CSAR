@@ -62,21 +62,33 @@ STANDARD TOOL: LS()
   Output:   CANONICAL FILE INVENTORY — latest version of each document
             family in Layer 2. Presented as table.
   Format:
-    Document    | Canonical file              | Role     | ~tokens | Write
-    -----------------------------------------------------------------------
-    CSAR        | CSAR.txt                    | root     |  ~3,500 | no
-    Clock       | Clock.txt                   | module   |  ~2,200 | no
-    Flower      | private/Flower.txt          | instance | ~XX,XXX | yes
-    Witch       | private/Witch.txt           | corpus   | ~XX,XXX | yes
-    VoxNovel    | VoxNovel.txt                | project  |  ~1,800 | yes
-    vaise       | ~/claudette/vaise/vaise.py  | agent    |  ~6,400 | yes
-    vaise seed  | ~/claudette/vaise/vaise_seed.txt | corpus | ~700 | yes
-    Traversal   | private/Traversal.txt       | doctrine | ~2,000 | yes
-    SMAX        | pub/SMAX.txt                | game     | ~3,000 | yes
-    RaTLE       | pub/RaTLE.txt               | doctrine | ~1,500 | yes
-    PAInTIn     | pub/PAInTIn.txt             | doctrine | ~2,500 | yes
-    Vaise doc   | pub/Vaise.txt               | project  | ~2,000 | yes
-    Spells      | private/Spells.txt          | corpus   |   ~500 | yes
+    Document    | Canonical file                         | Role     | ~tokens | Write
+    -------------------------------------------------------------------------------
+    CSAR        | CSAR.txt                               | root     |  ~3,500 | no
+    Clock       | Clock.txt                              | module   |  ~2,200 | no
+    Inventory   | Inventory.txt                          | module   |  ~4,200 | yes
+    Voice       | Voice.txt                              | module   |  ~2,600 | yes
+    Roles       | Roles.txt                              | module   |      — | yes
+    Secretary   | Secretary.txt                          | role     |      — | no
+    Mail        | Mail.txt                               | module   |      — | no
+    Help        | Help.txt                               | module   |      — | no
+    VoxNovel    | VoxNovel.txt                           | project  |  ~1,800 | yes
+    ── PRIVATE ~/claudette/private/ ────────────────────────────────────────────
+    Flower      | private/Flower.txt                     | instance |  ~4,800 | yes
+    Witch       | private/Witch.txt                      | corpus   |  ~8,200 | yes
+    Hacker      | private/Hacker.txt                     | corpus   |  ~7,700 | yes
+    Renata      | private/Renata.txt                     | corpus   |  ~5,500 | yes
+    Traversal   | private/Traversal.txt                  | doctrine |  ~2,000 | yes
+    Spells      | private/Spells.txt                     | corpus   |    ~500 | yes
+    Vase001     | private/Vase001.txt                    | archived |    ~500 | yes
+    ── VAISE ~/claudette/vaise/ ────────────────────────────────────────────────
+    vaise       | vaise/vaise.py                         | agent    |  ~6,400 | yes
+    vaise seed  | vaise/vaise_seed.txt                   | corpus   |    ~700 | yes
+    ── PUBLIC ~/claudette/CSAR/pub/ ────────────────────────────────────────────
+    SMAX        | pub/SMAX.txt                           | game     |  ~3,000 | yes
+    RaTLE       | pub/RaTLE.txt                          | doctrine |  ~1,500 | yes
+    PAInTIn     | pub/PAInTIn.txt                        | doctrine |  ~2,500 | yes
+    Vaise doc   | pub/Vaise.txt                          | project  |  ~2,000 | yes
     ...
 
   Token count: estimated from file size (chars ÷ 4). Updated on T1.

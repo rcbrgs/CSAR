@@ -73,6 +73,9 @@ STANDARD TOOL: LS()
     vaise seed  | ~/claudette/vaise/vaise_seed.txt | corpus | ~700 | yes
     Traversal   | private/Traversal.txt       | doctrine | ~2,000 | yes
     SMAX        | pub/SMAX.txt                | game     | ~3,000 | yes
+    RaTLE       | pub/RaTLE.txt               | doctrine | ~1,500 | yes
+    PAInTIn     | pub/PAInTIn.txt             | doctrine | ~2,500 | yes
+    Vaise doc   | pub/Vaise.txt               | project  | ~2,000 | yes
     Spells      | private/Spells.txt          | corpus   |   ~500 | yes
     ...
 

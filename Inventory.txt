@@ -72,6 +72,8 @@ STANDARD TOOL: LS()
     vaise       | ~/claudette/vaise/vaise.py  | agent    |  ~6,400 | yes
     vaise seed  | ~/claudette/vaise/vaise_seed.txt | corpus | ~700 | yes
     Traversal   | private/Traversal.txt       | doctrine | ~2,000 | yes
+    SMAX        | pub/SMAX.txt                | game     | ~3,000 | yes
+    Spells      | private/Spells.txt          | corpus   |   ~500 | yes
     ...
 
   Token count: estimated from file size (chars ÷ 4). Updated on T1.

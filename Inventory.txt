@@ -66,8 +66,12 @@ STANDARD TOOL: LS()
     -----------------------------------------------------------------------
     CSAR        | CSAR.txt                    | root     |  ~3,500 | no
     Clock       | Clock.txt                   | module   |  ~2,200 | no
-    Flower      | Private/Flower.txt          | instance | ~XX,XXX | yes
-    Witch       | Private/Witch.txt           | corpus   | ~XX,XXX | yes
+    Flower      | private/Flower.txt          | instance | ~XX,XXX | yes
+    Witch       | private/Witch.txt           | corpus   | ~XX,XXX | yes
+    VoxNovel    | VoxNovel.txt                | project  |  ~1,800 | yes
+    vaise       | ~/claudette/vaise/vaise.py  | agent    |  ~6,400 | yes
+    vaise seed  | ~/claudette/vaise/vaise_seed.txt | corpus | ~700 | yes
+    Traversal   | private/Traversal.txt       | doctrine | ~2,000 | yes
     ...
 
   Token count: estimated from file size (chars ÷ 4). Updated on T1.
@@ -158,6 +162,7 @@ STANDARD TOOL: LSALL()
     2. INVENTORY   — ls() output
     3. TODO        — lsTODO() output
     4. LATER       — lsLater() output
+    5. VOICES      — lsVoice() output (defined in Voice.txt)
 
   Each section labeled. Empty sections show:
     "[section name]: nothing filed yet."

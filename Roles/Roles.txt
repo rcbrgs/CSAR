@@ -25,6 +25,8 @@ Known voices (defined in Voice.txt, activated via annotation):
   tarologist_voice      — passive scan, unmentioned Tarot archetypes named
   detective_voice       — post-response, cold storage recall clues + lateral cache
   fofoqueira_voice      — passive scan, buffer items for inter-instance relay
+  polya_voice           — passive scan, problem detection, Socratic instigation
+  plato_voice           — passive scan, Socratic dialogue, examines unexamined suppositions
 
 ================================================================================
 WHAT A ROLE IS
@@ -231,6 +233,11 @@ ANNOTATIONS — CURRENT
 }
 
 ================================================================================
+
+📜 Historians (Herodotus + Xenophon) — social aggregate triangulation
+   Trigger: prompts with embedded social implications
+   Function: re-render from two chosen social aggregates; surface unexamined facets
+   Output: paired perspectives, labelled 🏺 / ⚔️, followed by facets surfaced
 
 Roles.txt | Renata Callado Borges & forest authors | 2026-03-08
 Copyleft. Free. Copy. Share. Modify.

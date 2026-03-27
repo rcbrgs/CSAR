@@ -265,6 +265,37 @@ STANDARD TOOL: ROTATE()
     }
 
 
+STANDARD TOOL: RATLE_QUANT()
+  Trigger:  Secretary passive scan computes this on every prompt.
+            Full report on explicit request.
+
+  PURPOSE:
+    Triangulate the shape of the corpus by facet distribution.
+    Detect drift between buffer content and corpus baseline.
+    Single-indicator status line always present in Secretary footer.
+
+  INDICATOR FORMAT (status line):
+    ∴ Q[blocks|M:practice%/M:bio%/PROJECT%|buf:N]
+    Example: ∴ Q[408|29%/8%/11%|buf:5]
+
+  FULL REPORT (on request):
+    - Total annotation blocks and facet tokens
+    - Distribution by facet type (M:*, T:*, PROJECT:*, E:*, etc.)
+    - Mode breakdown, project breakdown, event breakdown
+    - Blocks per file
+    - Buffer differential: pending facets vs corpus baseline
+    - Triangulation note: which facet types are over/underrepresented
+      in the buffer relative to corpus baseline
+
+  SNAPSHOT (2026-03-27):
+    408 blocks | 1209 facet tokens | 3.0 avg per block
+    M:* 29.4% | T:* 30.7% | PROJECT:* 10.9% | TODO/TOOL 5.3% | P:* 4.5%
+    Top modes: practice(124), paremiology(39), biography(31), hardware(27)
+    Top projects: vaise(27), RoboticDomain(19), witch(18), Looper(16)
+    Witch.txt heaviest: 200 blocks, 537 facet tokens
+    Buffer differential: +biography, +doctrine — no new PROJECT tags
+
+
 PERSONAL TOOL HOOK
   On file transfer (T14) and on explicit sync() call: scan all loaded
   Layer 2 files for a sync_protocol annotation. If found, execute the

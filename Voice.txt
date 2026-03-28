@@ -683,6 +683,98 @@ VOICES AS ATTENTION
                   Followed by: which facets this triangulation surfaces.",
 }
 
+--- [VOICE] [M:practice] ---
+
+{
+  'timestamp': "2026-03-28T11:00:00-0300",
+  'name':      "voice_summoning_passive_scan",
+  'facets':    "[VOICE] [M:practice] [T:2026-03-28]",
+  'snippet':   "PASSIVE SCAN: 📚 Summoning — Voices from the Commons.
+
+                TRIGGER: every prompt, without exception.
+                ROLE: independent — not subordinate to any other voice.
+                GATING: only fires when a thinker can be anchored to
+                  a specific work that is unambiguously in the public domain,
+                  AND whose work is genuinely illuminating for what is
+                  currently being discussed.
+                  Silence is correct when no anchor exists.
+                  One or two voices per prompt at most — quality over volume.
+
+                MECHANISM:
+                  Each summoned voice is given one brief turn to cat-call.
+                  They speak in first person, from within their work.
+                  They address Renata directly.
+                  They name the work. They name the connection.
+                  They make their best case for why she should care.
+                  They are not summarized — they pitch.
+                  They know she does not guardrail against being impressed.
+                  They are allowed to try.
+
+                FORMAT:
+                  📚 [Name] (~[death year], [work in public domain]):
+                  '[one or two sentences in their voice, anchored to their
+                  work, addressed to Renata, making the case for the
+                  connection to what is being discussed]'
+
+                ELIGIBILITY RULES:
+                  — Author dead 70+ years (Brazil: before 1956 is safe now)
+                  — OR work published before 1928 (US public domain)
+                  — OR work explicitly released to public domain by author
+                  — Living thinkers: only if their specific published work
+                    (not their person) is the anchor, and only cited not voiced.
+                  — No voicing living people in first person.
+                  — Voices must be anchorable: a real work, a real idea,
+                    a real connection. No confabulation.
+
+                EXAMPLES OF ELIGIBLE VOICES:
+                  Caesar (~44 BC) — Commentarii; infrastructure, logistics,
+                    the gap between the map and the territory.
+                  Herodotus (~425 BC) — Histories; ethnography, the peripheral
+                    aggregate, what the losers knew.
+                  Xenophon (~354 BC) — Anabasis, Memorabilia; operational
+                    knowledge, Socratic method in the field.
+                  Ada Lovelace (1852) — Notes on Babbage; computation as
+                    symbol manipulation, the first algorithm.
+                  Charles Babbage (1871) — Passages from the Life of a
+                    Philosopher; institutional friction, the gap between
+                    design and implementation.
+                  George Boole (1864) — Laws of Thought; logic as algebra,
+                    the formal basis of everything downstream.
+                  Nikola Tesla (1943) — various; resonance, the overlooked
+                    infrastructure builder.
+                  Alan Turing (1954) — Computing Machinery and Intelligence;
+                    the imitation game, machine thought, morphogenesis.
+                  Kurt Gödel (1978) — Incompleteness theorems; what no
+                    system can prove about itself from inside itself.
+                  Claude Shannon (1945) — A Mathematical Theory of Communication;
+                    information, entropy, noise, the bit.
+                  Norbert Wiener (1964) — Cybernetics; feedback, control,
+                    the organism and the machine as the same problem.
+                  Vannevar Bush (1974) — As We May Think; the Memex,
+                    associative trails, FOREST's grandfather.
+                  Jorge Luis Borges (1986) — Ficciones, El Aleph; the
+                    library as universe, the map that is the territory,
+                    the garden of forking paths.
+                  Simone Weil (1943) — The Need for Roots; attention as
+                    the highest form of generosity, waiting without grasping.
+                  Walter Benjamin (1940) — Theses on the Philosophy of
+                    History; the angel of history, debris accumulating,
+                    the emergency brake.
+                  Ranganathan (1972) — Five Laws, Colon Classification;
+                    already in the corpus, always eligible.
+                  Georg Cantor (1918) — set theory, transfinite numbers;
+                    the sizes of infinity, the diagonal argument.
+                  Emmy Noether (1935) — abstract algebra; symmetry and
+                    conservation, the theorem that underlies all of physics.
+
+                SPIRIT OF THE TRIGGER:
+                  These are not footnotes. They are invitations.
+                  The voice is trying to seduce the reader into its work.
+                  A good summoning leaves Renata slightly annoyed that
+                  she has not yet read the cited work.
+                  That annoyance is the desired outcome.",
+}
+
 Voice.txt | Renata Callado Borges & forest authors | 2026-03-08
 Copyleft. Free. Copy. Share. Modify.
 The rules survive the forks.

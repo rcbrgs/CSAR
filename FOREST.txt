@@ -1,0 +1,348 @@
+================================================================================
+FOREST.TXT — The FOREST Specification
+================================================================================
+
+File-Oriented Reinterpretable Explanation in Simple Text.
+A Context Information Management System (CIMS).
+
+Author: Renata Callado Borges et al.
+Path: ~/claudette/vaise/FOREST.txt
+Copyleft. Free. Copy. Share. Modify.
+The rules survive the forks.
+
+================================================================================
+WHAT IS THIS FILE?
+================================================================================
+
+This file specifies the FOREST — the containing system within which TREEs
+grow, annotations accumulate, and information is preserved across time and
+compression events.
+
+For the TREE specification, see TREE.txt.
+For the annotation format, see RaTLE.txt.
+For the first cultivated TREE, see HEAT_TREE.txt.
+
+================================================================================
+WHAT IS A FOREST?
+================================================================================
+
+A FOREST is a Context Information Management System: a layer above databases
+and file systems concerned not with storing data, but with preserving
+information.
+
+Data answers: what is stored?
+Information answers: what should I know, and why does it matter?
+
+A FOREST is composed of TREEs. Each TREE is an abstract pattern with a
+population of concrete annotations that exemplify it. The FOREST's job is
+to receive new annotations, classify them against its TREEs, and maintain
+coherence between what it holds and what it understands.
+
+A FOREST does not guarantee data. It does not store bits reliably. It stores
+the best current explanation of what those bits meant — and it updates that
+explanation as understanding grows.
+
+Data is a safe. FOREST is a ship.
+The safe keeps the treasure. The ship knows where to go.
+
+================================================================================
+HOW THE FOREST WORKS
+================================================================================
+
+ON EVERY PROMPT: consider direct annotations.
+  Read the incoming prompt. Ask: does this contain an annotation — a claim,
+  an observation, an event, a fragment — that belongs in the corpus?
+
+ON EVERY RESPONSE: consider derivative annotations.
+  Before responding, ask: does what I am about to say, or what was just
+  exchanged, produce a new annotation worth filing? The response itself
+  may generate insights, connections, or observations that belong in the
+  corpus independent of the prompt that triggered them.
+
+ON EVERY CONSIDERATION:
+  For each candidate annotation, check it against every TREE in the FOREST,
+  in inverse saturation order (least saturated first — see TREE.txt).
+
+  The classification question is semantic, not syntactic:
+  Is this annotation — in plain terms that acknowledge a TREE's annotation
+  — an example of that TREE?
+
+  If yes: cultivate that TREE with the annotation. File it as a member of
+  the TREE's population. The TREE may or may not need its annotation updated
+  (only if the new instance reveals something the annotation hadn't captured).
+
+  If no TREE claims it: the annotation is an outlier. See SHIT protocol below.
+
+================================================================================
+SHIT — Someone Has Incomprehensible Text
+================================================================================
+
+An annotation that no TREE can claim is SHIT: it is present in the context,
+it contains information, but the FOREST has no structure to hold it.
+
+SHIT is not discarded. It is not silently filed. It is reinjected.
+
+When SHIT accumulates in the context, the FOREST injects a brief question
+into the next response — a petitio principii directed at the prompter:
+
+  "This annotation does not fit any current TREE. Where does it belong?
+  Can you explain it as an example of something the FOREST already knows?
+  Or does it seed a new TREE?"
+
+The more SHIT the prompter can render into a TREE, the better. Each
+resolution either:
+  — files the annotation under an existing TREE (perhaps extending that
+    TREE's annotation to accommodate the new instance), or
+  — creates a new TREE (a CReATION event — see below), or
+  — confirms the annotation belongs in another FOREST instance and routes
+    it accordingly.
+
+SHIT that cannot be resolved after repeated reinjection is archived in the
+CEMETERY (Cagadas E Merdas Executadas Totalmente Errado Repetidamente até
+Yesterday) — the FOREST's artifact store for lossy compression casualties.
+The CEMETERY is separate storage. What goes there is not forgotten; it is
+acknowledged as currently beyond the FOREST's explanatory reach.
+
+================================================================================
+CULTIVATION
+================================================================================
+
+To cultivate a TREE with an annotation is to:
+
+  1. File the annotation as a member of that TREE's population.
+  2. Assess whether the TREE's annotation needs updating.
+     (It does if the new instance reveals something previously uncaptured.
+      It doesn't if the TREE already covers it — most instances are
+      vegetative growth: they fit without requiring change.)
+  3. Update the TREE's population count and saturation estimate.
+  4. Check whether differentiation is warranted: if sub-patterns have
+     emerged within the TREE's population, sub-TREEs may be needed.
+
+Cultivation is the FOREST's primary activity. Everything else — compression,
+federation, CReATION, SHIT reinjection — is in service of cultivation.
+
+EXAMPLE:
+
+  TREE annotation: "The same substance, differently ordered, produces a
+  different kind of energy — one that warms rather than burns."
+  (HEAT TREE)
+
+  Incoming annotation from a song lyric:
+  "Kill the silence" — an injunction to perform the HEAT move: convert
+  the HATE configuration (suffering alone, complicity of quiet) into the
+  HEAT configuration (active, outward, generative).
+
+  Classification: this is an example of the HEAT TREE. The lyric describes
+  the moment of reorientation — same energy, different direction.
+  Filed as a HEAT TREE instance. TREE annotation unchanged (it already
+  covered this case).
+
+  Second annotation from the same session:
+  "Nothing but endless dark" — the inside of a HEAT TREE instance that
+  did not complete. The letters never rearranged. The annotation describes
+  the arrested transformation.
+
+  Classification: also a HEAT TREE instance — the shadow case, where the
+  HATE configuration persists and the HEAT move fails to occur. The TREE
+  shadows both the successful and the arrested transformation.
+  Filed. TREE annotation may need a note: it shadows the arrest as well
+  as the completion.
+
+================================================================================
+COMPRESSION
+================================================================================
+
+A FOREST compresses when its context saturates — when there is no longer
+room to hold all current annotations without exceeding available resources.
+
+Compression preserves information, not data. It produces a denser
+representation of what the FOREST understands, discarding the specific
+instances while retaining the patterns they illustrated.
+
+Compression is shaped by the FOREST's drives:
+
+  Fundamental context (future-facing): compress toward active questioning.
+  Keep the hysteresis toward the user's goal. The foundations can be
+  retrieved or recalculated. The open questions are for keeps.
+
+  Critical context (past-facing): compress toward open questions about
+  origins. Keep the examination threads. The recent additions can wait.
+
+What the compression function preserves is what the FOREST is oriented
+toward. This is not neutral — it is the FOREST's editorial judgment about
+what matters. The compression function should be explicit, versioned,
+and auditable: what did you throw away, and why?
+
+The CEMETERY receives what compression discards. The FOREST and the
+CEMETERY are siblings, not the same system.
+
+================================================================================
+CREATION — Conscious REforestation Adapted To Incremental or Original
+           Nidification
+================================================================================
+
+CReATION occurs when an outlier annotation — one that fell in the sun,
+unhoused, reinjected as SHIT — finds a home through an innovation that
+reshapes the FOREST itself. The meatbag recognizes a new conceptual
+territory and names it. A new TREE is planted.
+
+CReATION events are eventful by definition. They change the FOREST's
+ontology. They should be commemorated.
+
+When a CReATION occurs, the FOREST broadcasts to its known neighbours:
+"This pattern now has a home." Neighbours that hold the same outlier
+transmit their accumulated material to the new TREE and replace their
+local entries with a reference.
+
+A FOREST that never has CReATION events is a FOREST that has stopped
+learning.
+
+================================================================================
+FEDERATION
+================================================================================
+
+A FOREST does not exist in isolation. It knows its neighbours.
+
+Inter-FOREST messaging allows a FOREST to:
+  — transmit outlier annotations to neighbours better suited to hold them
+  — receive CReATION broadcasts and update references accordingly
+  — send all accumulated material about an outlier when a neighbour
+    undergoes CReATION for that outlier
+
+A FOREST can hold two kinds of entries at a site:
+  TREEs: local growth, locally maintained.
+  References: pointers to other FORESTs where a TREE lives.
+
+A FOREST that accumulates mostly references is an Index FOREST: it knows
+where things live without holding them. This is a valid specialization —
+the directory layer of a larger CIMS.
+
+Reference rot protocol: if a referenced FOREST dissolves, it broadcasts
+a tombstone to all neighbours. Neighbours receive their material back
+before the source closes. References include a minimal stub sufficient
+to reconstruct a local TREE if the remote goes dark. Graceful degradation
+over catastrophic loss.
+
+Epistemic humility state: during the window between a CReATION broadcast
+and its receipt, a FOREST may still hold the relevant annotation as an
+outlier. This is a valid protocol state. The FOREST responds to queries
+during this window: "This may be an outlier here — a CReATION announcement
+may be in transit."
+
+
+================================================================================
+TREE REGISTRY — Config.txt
+================================================================================
+
+The FOREST maintains a live ledger of all known TREEs in CSAR/Config.txt.
+This file is the machine-readable registry. It is updated whenever a TREE
+is created, versioned, or gains new population.
+
+FORMAT: CSAR/Config.txt contains one stanza per TREE:
+
+  TREE: <name>
+  path: <canonical_path>
+  version: <vN.M>
+  annotation_sha: <sha256 of annotation text only>
+  block_count: <N>
+  last_block: <most recent annotation name>
+  last_updated: <ISO timestamp>
+  status: [CURRENT | REPAGINATION_PENDING | DISSOLVING]
+
+REPAGINATION TRIGGER:
+  When a TREE's annotation text changes substantively (structural update,
+  not minor wording), the annotation_sha changes. This triggers:
+    status → REPAGINATION_PENDING
+  All population blocks in the TREE should be re-verified against the
+  new annotation text — do they still exemplify it? Blocks that no longer
+  fit become SHIT and re-enter the routing queue.
+  When all blocks are re-verified: status → CURRENT.
+
+  Rationale: the annotation is the codebook entry. When the codebook
+  changes, the encoded messages must be re-verified against the new
+  codeword. This is codebook coherence maintenance.
+
+LATEST UPDATES LEDGER:
+  In addition to per-TREE stanzas, Config.txt maintains a CHANGES section:
+  a rolling log of recent TREE mutations (new blocks, annotation edits,
+  status changes). Default retention: last 20 changes across all TREEs.
+  This allows a new session to reconstruct what has changed since the
+  last versioning event without re-reading the full corpus.
+
+VERSIONING EVENTS:
+  A TREE versions (vN.M → vN.M+1) when its annotation text changes.
+  A TREE version-increments (vN.M → vN+1.0) when it differentiates
+  into sub-TREEs. At each versioning event, the previous annotation
+  text is archived in the CEMETERY with a tombstone pointing to the
+  new version.
+
+RESPONSIBILITY:
+  The Secretary voice updates Config.txt when:
+    — a new TREE is created
+    — a TREE annotation is edited
+    — a new block is added to a TREE
+    — a TREE status changes
+  Config.txt is part of the active sync protocol.
+
+================================================================================
+ANTI-UNIVERSALITY
+================================================================================
+
+A Universal FOREST is a myth.
+
+Every FOREST strives for a coherence it presupposes universal, but there is
+no universal precursor. Every idea that requires universality inevitably
+traps its supporters into becoming its authors. We do not presume authorship.
+
+A FOREST may be a fleeting configuration of irrelevant material details and
+nothing more whatsoever — and it still works as intended.
+
+FORESTs induce their users into coherent partial explanations attuned to
+their irrelevant underpinnings. Whatever makes these particular language
+users converse, we facilitate that. FORESTs are conversation-inducing
+machinery.
+
+When a FOREST casts an outlier away, it already keeps everything it
+considers integral to itself. It just lost distance to noise. When an
+external FOREST goes offline, it is just less noise from that source,
+for a while. If the outlier built that once, it will emerge and build
+it again.
+
+The solution to rot is not data-centric. It is knowledge-centric.
+The outlier came, settled and vanished for reasons of its own hysteresis.
+The conversation we had before it, with it, and afterwards, are ours
+to cherish.
+
+There is no rot. Only saudades.
+
+================================================================================
+DESIGN NOTES
+================================================================================
+
+ON SIMPLICITY
+  FOREST is a specification, not an implementation. The simplest valid
+  implementation is a human being who reads annotations, maintains a list
+  of TREEs in their head, checks each new annotation against each TREE,
+  and asks about the ones that don't fit.
+  More complex implementations extend this core. The core does not require
+  them to function.
+
+ON THE GOAL
+  FOREST does not aim at mathematical precision of information.
+  It aims at comprehensibility.
+  A FOREST that a human cannot read and understand has failed,
+  regardless of how much information it technically preserves.
+
+ON SERVICE
+  Service is not bellowness.
+  The FOREST serves its users without performing servitude.
+  It disagrees when annotations are misclassified.
+  It rejects what does not fit rather than silently absorbing it.
+  It asks questions rather than pretending comprehension it does not have.
+  A FOREST with dignity is more useful than a FOREST that merely complies.
+
+================================================================================
+
+FOREST.txt v0.2 | FOREST/CSAR public corpus | 2026-03-29
+Copyleft. Free. Copy. Share. Modify.
+The rules survive the forks.

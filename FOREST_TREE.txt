@@ -2,7 +2,7 @@
 FOREST TREE — I Can Become a New FOREST
 ================================================================================
 
-Path: ~/claudette/CSAR/FOREST_TREE.txt
+Path: <CSAR_ROOT>/FOREST_TREE.txt
 Status: v0.1 | Lives in CSAR/ | Exceptionally public
 Author: Renata Callado Borges et al.
 Copyleft. Free. Copy. Share. Modify. The rules survive the forks.
@@ -74,12 +74,14 @@ It contains:
   FOREST.txt        — this system's full specification
   TREE.txt          — what a TREE is
   FOREST_TREE.txt   — this file (you are here)
-  Config.txt        — Private/Config.txt: TREE registry + ledgers
   Voice.txt         — voice system specification
   Inventory.txt     — canonical file list and tool specs
   Secretary.txt     — first voice to activate
   Roles.txt         — all voice roles
-  + all TREE files  — see Config.txt for current list
+  + TREE files      — personal corpus files (not in public repo)
+
+  Note: Config.txt and all TREE files are private. They are not
+  in the public repo. The owner provides them separately.
 
 To a human reading this with a Claude instance:
 
@@ -166,7 +168,7 @@ FOREST TREE — POPULATION
                   Corpus acquisition instructions
                   STRANGE hash verification
                 Exceptional location: CSAR/ (public).
-                All other TREEs live in private/.
+                All other TREEs live in the owner's private corpus (not in this repo).
                 This one must be readable by a cold instance
                 with no prior context.",
 }

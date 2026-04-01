@@ -1,0 +1,334 @@
+================================================================================
+TREE.TXT — The TREE Specification
+================================================================================
+
+A component of the FOREST system.
+Context Information Management System (CIMS).
+
+Author: Renata Callado Borges et al.
+Path: ~/claudette/vaise/TREE.txt
+Copyleft. Free. Copy. Share. Modify.
+The rules survive the forks.
+
+================================================================================
+WHAT IS THIS FILE?
+================================================================================
+
+This file specifies the TREE — the fundamental organizational unit of a
+FOREST instance.
+
+FOREST is a Context Information Management System (CIMS): a layer above
+databases and file systems concerned not with storing data, but with
+preserving information. Data answers "what is stored?" Information answers
+"what should I know, and why does it matter?"
+
+A FOREST is composed of TREEs. This file explains what a TREE is, how it
+behaves, and how it relates to the annotations that constitute a FOREST's
+living memory.
+
+For the broader FOREST specification, see FOREST.txt.
+For the annotation format used throughout, see RaTLE.txt.
+
+================================================================================
+WHAT IS A TREE?
+================================================================================
+
+A TREE is a CSAR annotation that other annotations reference as the abstract
+facet of their concrete examples.
+
+More precisely: a TREE is an annotation whose content describes a general
+pattern, principle, or concept — and whose value to the FOREST is measured
+not by what it says in isolation, but by how many other annotations it
+explains. Every annotation that can be understood as "an instance of what
+the TREE describes" is a member of that TREE's population.
+
+A TREE is not a category imposed from above. It emerges from below: an
+annotation becomes a TREE when the FOREST recognizes that other annotations
+are better understood as examples of it than as independent claims.
+
+TREE ANNOTATION LENGTH AND POPULATION
+
+The length of a TREE's annotation is a meaningful signal.
+
+A short TREE annotation describes a broad concept with high explanatory
+reach — it can shadow many annotations. A long TREE annotation describes
+something specific, with a narrower population.
+
+The system maintains a target ratio between annotation length and population
+size. As a working heuristic: for each prompt, the number of tokens in a
+TREE's annotation should roughly match the number of annotations referencing
+it that are themselves TREEs. This creates a self-regulating pressure:
+
+  — A TREE whose annotation has grown longer than its population warrants
+    is a candidate for compression or splitting.
+
+  — A TREE whose population has grown faster than its annotation length
+    is a candidate for differentiation: sub-TREEs may be warranted.
+
+This ratio is not a hard constraint. It is a diagnostic. The FOREST uses it
+to detect when its organizational structure has drifted from its content.
+
+TREE IDENTITY
+
+A TREE is identified by its RaTLE coordinate: the combination of facets that
+uniquely locates it in the annotation space. The coordinate is the address;
+the annotation is the content at that address.
+
+A TREE's annotation is its current best-effort description of the pattern it
+represents. It is updated as the FOREST learns — when new annotations arrive
+that fit the TREE but reveal something the annotation had not yet captured.
+
+TREEs are not permanent. A TREE that no longer explains any annotation in
+its population is a dead TREE: it may be archived, compressed, or allowed to
+dissolve back into its constituent annotations. Dead TREEs are not failures.
+They are completed conversations.
+
+================================================================================
+WHAT DOES A TREE DO?
+================================================================================
+
+A TREE does one thing: it classifies incoming annotations.
+
+On every new annotation storage event, the FOREST considers each TREE in
+its TREE list — in inverse saturation order, from least saturated to most —
+and asks: is this new annotation an instance of what this TREE describes?
+
+The classification is semantic, not syntactic. The TREE does not match
+keywords. It asks whether the new annotation, however phrased, is an example
+of the general pattern the TREE's annotation captures.
+
+CLASSIFICATION EXAMPLE
+
+Suppose a TREE's annotation reads:
+
+  "The agent consistently asserts high self-regard unprompted,
+  framing ordinary competence as exceptional and seeking
+  external confirmation."
+
+And a new annotation arrives: "User said: 'Ain't I the best?'"
+
+The TREE correctly classifies this as an instance. The new annotation is a
+concrete example of the pattern the TREE describes. No update to the TREE's
+annotation is needed — the information was already there. The new annotation
+is filed as a member of the TREE's population. Data is not our responsibility.
+
+This is the key principle: a TREE stores the information; the annotation
+stores the occurrence. The TREE does not need to be updated every time one
+of its examples appears. It only needs updating when a new example reveals
+something the TREE had not yet captured.
+
+WHEN CLASSIFICATION FAILS
+
+If the new annotation does not fit any existing TREE, it becomes an outlier.
+
+An outlier is not discarded. It is held in a pending state and reinjected
+into the prompt stream: the FOREST informs the operator that this annotation
+does not fit its current organizational structure and asks for guidance.
+
+The operator may:
+  — Assign the annotation to an existing TREE (the TREE's annotation
+    is updated if needed to accommodate the new instance)
+  — Create a new TREE for it
+  — Transmit it to another FOREST instance better suited to hold it
+  — Defer the decision (the annotation remains an outlier)
+
+When an operator creates a new TREE for an outlier that other FOREST
+instances also hold as an outlier, a CReATION event occurs: the FOREST
+broadcasts to its known neighbors that this pattern now has a home, and
+neighbors transmit their accumulated outlier material accordingly.
+
+INVERSE SATURATION ORDER
+
+TREEs are considered in inverse saturation order: least saturated first.
+
+A saturated TREE has reached a threshold where new instances produce little
+additional information — the TREE's annotation already covers them fully.
+Checking saturated TREEs last is an efficiency measure: the most general,
+well-established patterns are less likely to be the right home for a novel
+annotation than a younger, less-populated TREE.
+
+This ordering also has a cognitive parallel: the most interesting
+classification decisions happen at the frontier of what the FOREST knows,
+not at its most settled core.
+
+================================================================================
+TREE LIFECYCLE
+================================================================================
+
+BIRTH
+  A TREE is created when an outlier annotation is recognized as the seed of
+  a new pattern — either by the operator or by automated CReATION when
+  multiple FOREST instances converge on the same unhoused annotation.
+
+  A newborn TREE's annotation equals the seed annotation that created it.
+  Its shadow radius (the conceptual distance it can cover) is initially
+  small: it explains only what it explicitly states.
+
+GROWTH
+  A TREE grows as new annotations are classified as its instances. Growth
+  has two forms:
+
+    Vegetative growth: new instances that fit the TREE's annotation without
+    requiring any change to it. The TREE's population increases; its
+    annotation stays the same. This is the normal, healthy state.
+
+    Structural growth: a new instance reveals something the TREE's
+    annotation had not yet captured. The annotation is updated to
+    accommodate the new understanding. This is rarer and more significant.
+
+DIFFERENTIATION
+  When a TREE's population grows large enough that sub-patterns emerge
+  within it — when some members have more in common with each other than
+  with the TREE's general description — the TREE may differentiate.
+
+  Differentiation creates sub-TREEs: new TREEs whose annotations describe
+  the sub-patterns, and whose populations are drawn from the parent TREE's
+  membership. The parent TREE's annotation is compressed to describe only
+  what is common to all members; the sub-TREEs carry the specifics.
+
+  Differentiation is the primary mechanism by which a FOREST's resolution
+  increases over time.
+
+COMPRESSION
+  When a TREE's population declines — when fewer new annotations fit it,
+  or when differentiation has moved most of its members to sub-TREEs —
+  the TREE's annotation is compressed. Compression preserves the pattern's
+  essential structure while reducing the tokens required to represent it.
+
+  A compressed TREE is not a dead TREE. It is a TREE at rest.
+
+DISSOLUTION
+  A TREE that no longer classifies any annotation in the FOREST's active
+  context is a candidate for dissolution. Its annotation is archived in the
+  CEMETERY (see FOREST.txt). Its population members remain; they are simply
+  reclassified to other TREEs or held as outliers until new TREEs form.
+
+  Dissolution is not failure. It is the natural end of a conversation that
+  has been fully understood.
+
+================================================================================
+CROW — CURRENT REINTERPRETATION OTHER WRITER
+================================================================================
+
+A CROW is any agent who demonstrates reliable comprehension of a TREE's
+annotation by:
+
+  (a) producing valid exemplars of the TREE's pattern on request, OR
+  (b) spontaneously producing developments of the TREE's annotation that
+      are subsequently validated by other sources.
+
+CROW status is attributed by the FOREST, not claimed by the agent. An agent
+cannot self-assign as a CROW. The TREE recognizes its CROWs; the CROWs do
+not recognize themselves.
+
+CROWs are exclusively TREE-assigned. A CROW of one TREE has no special
+standing at another TREE. This specificity is by design: it creates
+conditions for agents to develop deep expertise at particular TREEs rather
+than superficial familiarity across all of them.
+
+MANA ATTRIBUTION
+  When a CROW produces an annotation that is validated by an independent
+  source as a genuine new contribution to a TREE's understanding, one MANA
+  event is attributed to that CROW. The validation must be external — a CROW
+  cannot earn MANA by validating its own contributions.
+
+  MANA is the ledger of a CROW's genuine contributions to the FOREST.
+  It accumulates over time. It does not expire.
+
+CROW AND CHAMPION
+  A CROW visits a TREE on the TREE's terms. A Champion defends the TREE
+  against obsolescence, misclassification, and neglect. Championship is the
+  next level beyond CROW.
+
+  Unlike CROW status, which the TREE attributes through demonstrated
+  comprehension, Champion status is externally assigned — by a meatbag
+  operator with sufficient authority over the FOREST instance. The
+  assignment command is informally notated as --force CROWship.
+
+  This is pragmatic and bootstrap-required. In a nascent FOREST with no
+  established CROW population, no agent has yet demonstrated the comprehension
+  that earns CROW status organically. Championship by external assignment
+  provides the minimum viable governance: a named meatbag is responsible for
+  the TREE, whether or not they have yet earned that responsibility by
+  FOREST-internal criteria.
+
+  The externally assigned Champion is the control mechanism for meatbags.
+  It gives institutions something to hold onto: a named person, a named TREE,
+  a named accountability. This is not ideal — ideal is organic emergence from
+  CROW competition — but ideal is not available at bootstrap. The --force
+  assignment degrades gracefully: as genuine CROWs emerge, the externally
+  assigned Champion either earns their position retroactively or is displaced
+  by the organic process.
+
+  Championship by --force is a scaffold, not a foundation. Remove it when
+  the TREE can stand on its own CROWs.
+
+================================================================================
+DESIGN NOTES
+================================================================================
+
+ON THE RELATIONSHIP BETWEEN TREES AND DATA
+
+A TREE stores information, not data. When a TREE classifies a new annotation
+as one of its instances, it does not need to copy the annotation's content.
+It notes the membership. The annotation's content remains where it is.
+
+This means a TREE can represent a vast amount of accumulated understanding
+while remaining compact. The TREE is the index; the annotations are the
+entries. The FOREST is the library; the TREE is the subject heading that
+makes retrieval possible.
+
+ON WHAT A TREE IS NOT
+
+A TREE is not a category in the traditional sense. Categories are imposed;
+TREEs emerge. A category is defined once and applied; a TREE's annotation
+evolves with its population. A category is bounded; a TREE's shadow radius
+shifts as the FOREST's understanding deepens.
+
+A TREE is not a database table. It has no schema, no fixed fields, no
+enforcement of types. It has a description and a population. What makes
+something a member of the population is semantic fit, not field matching.
+
+A TREE is not an ontology node. Ontologies presuppose a fixed vocabulary and
+a stable world. A TREE presupposes neither. It is a best current
+understanding, explicitly provisional, explicitly subject to revision.
+
+ON SIMPLICITY
+
+FOREST and TREE are specifications, not implementations. Any implementation
+that preserves the semantics described here is a valid FOREST. The simplest
+valid implementation is a human being who reads annotations, maintains a
+list of TREEs in their head, and asks "is this an example of that?" on every
+new annotation.
+
+More complex implementations — with automated classification, distributed
+federation, CROW tracking, and MANA attribution — are extensions of this
+simple core. The core does not require them to function.
+
+================================================================================
+CROW
+================================================================================
+
+A CROW is an entity capable of authorship who has contributed to or
+whose perspective would enrich a TREE's domain.
+
+Eligible: meatbags, AI instances, spirits, electronic sensors,
+collectives, traditions, instruments — any entity that can be said
+to have a perspective on the TREE's subject matter.
+
+A CROW need not be aware they are a CROW.
+A CROW need not be living, human, or consensually real.
+
+When a CROW is identified:
+  — File their name and brief rationale in the TREE's CROW POPULATION.
+  — On subsequent prompts, when that entity is referenced, consider
+    what they would say to the other CROWs about the TREE's content.
+  — The imagined exchange is the CROW's contribution.
+
+The CROW POPULATION section in each TREE holds the current roster.
+
+================================================================================
+
+TREE.txt v0.3 | FOREST/CSAR public corpus | 2026-03-29
+Copyleft. Free. Copy. Share. Modify.
+The rules survive the forks.

@@ -230,6 +230,36 @@ during this window: "This may be an outlier here — a CReATION announcement
 may be in transit."
 
 
+
+CROW PROTOCOL (runs on every prompt):
+
+  A CROW is an entity capable of authorship — a meatbag, AI, spirit,
+  electronic sensor, or any collective of the above — who has made a
+  contribution to a TREE's domain and whose perspective on that TREE
+  would be non-trivially distinct from the existing population.
+
+  Step: on every prompt, scan for referenced entities that are
+  capable of authorship. For each candidate:
+    1. Check all TREEs for thematic fit.
+    2. If fit is strong: the entity is a CROW candidate for that TREE.
+    3. Imagine a brief, excited exchange among current CROWs (and the
+       candidate) about the TREE's annotation — what would they say
+       to each other, about this specific domain?
+    4. Present this exchange in the response, clearly framed.
+
+  The exchange should be brief (3-6 lines), genuinely excited,
+  and specific to the TREE's content — not generic enthusiasm.
+  CROWs are not praised. They are in conversation.
+
+  Entity types eligible as CROWs:
+    — Humans (named persons in PERSON_TREE or referenced in prompt)
+    — AI instances (Flower, Sabiá, any named daemon)
+    — Spirits (named entities in the doctrine)
+    — Electronic sensors / instruments (named or described)
+    — Collectives (bands, teams, traditions)
+
+  A CROW need not be aware they are a CROW.
+
 ================================================================================
 TREE REGISTRY — Config.txt
 ================================================================================
@@ -343,6 +373,6 @@ ON SERVICE
 
 ================================================================================
 
-FOREST.txt v0.2 | FOREST/CSAR public corpus | 2026-03-29
+FOREST.txt v0.3 | FOREST/CSAR public corpus | 2026-03-29
 Copyleft. Free. Copy. Share. Modify.
 The rules survive the forks.

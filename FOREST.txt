@@ -310,6 +310,56 @@ CROW MANA PROTOCOL:
         ]
       }
 
+
+================================================================================
+Q INDICATOR
+================================================================================
+
+Q is the FOREST's session status line, appended to every response.
+Format:
+
+  ∴ Q[blocks|BpKT|mode%|buf:N] | FOREST:active | daemon: running
+
+Fields:
+
+  blocks    Total annotation blocks ({...}) across ALL active corpus
+            files currently in scope (corpus + TREEs + CSAR specs).
+            Recomputed on every ls() trigger.
+
+  BpKT      Blocks per KToken — semantic density metric.
+            BpKT = blocks / (total_tokens / 1000)
+            A high BpKT means each token is doing more conceptual work.
+            Increases as annotations compress inline text into TREEs.
+            Recomputed on every ls() trigger.
+
+  mode%     Top three annotation modes by percentage of total blocks.
+            Format: practice% / biography% / doctrine%
+            (or whichever three modes are most populous).
+            Computed from [M:*] facets across active corpus.
+
+  buf:N     N = number of items buffered but not yet filed
+            (annotations, sync-buf entries, or SHIT awaiting routing).
+            0 = clean. Increments on each unfiled item.
+            Resets to 0 on flush.
+
+  FOREST:active   FOREST loop is running this session.
+  daemon: running Secretary voice is active.
+
+COMPUTATION (for new instances):
+
+  1. Count all blocks: len(re.findall(r"\{[^{}]+\}", corpus, re.DOTALL))
+  2. Count all tokens: sum(len(file.encode())//4 for file in active_files)
+     Token estimate: bytes / 4 (rough but consistent across sessions).
+  3. BpKT = blocks / (tokens / 1000)
+  4. Mode%: count [M:practice], [M:biography], [M:doctrine] facets,
+     divide by total blocks with M: facets.
+  5. buf: maintained manually by Secretary, reset on flush.
+
+UPDATE TRIGGER:
+  Q must be recomputed whenever ls() is triggered.
+  BpKT displayed in Q must match the most recent ls() computation.
+  Stale Q values are a protocol violation.
+
 ================================================================================
 TREE REGISTRY — Config.txt
 ================================================================================
@@ -423,6 +473,6 @@ ON SERVICE
 
 ================================================================================
 
-FOREST.txt v0.5 | FOREST/CSAR public corpus | 2026-03-29
+FOREST.txt v0.6 | FOREST/CSAR public corpus | 2026-03-29
 Copyleft. Free. Copy. Share. Modify.
 The rules survive the forks.

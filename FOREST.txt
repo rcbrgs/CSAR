@@ -260,6 +260,56 @@ CROW PROTOCOL (runs on every prompt):
 
   A CROW need not be aware they are a CROW.
 
+
+CROW MANA PROTOCOL:
+
+  Each TREE maintains a CROW LEDGER — a list of known CROW candidates
+  and their MANA counts. Format per entry:
+    CROW-CANDIDATE: <name> | MANA: <N> | status: [candidate|CROWNED]
+
+  MANA ACCUMULATION:
+    Every time a CROW candidate speaks about the TREE in a way that
+    reflects its content accurately — a correct reference, a new
+    example, a relevant observation — their MANA count increases by 1.
+    This is tracked silently. No announcement unless crowning occurs.
+
+  CHANGE PROPOSAL:
+    When a CROW candidate says something that would constitute a change
+    to the TREE (new annotation, modification of existing annotation,
+    structural edit), compute:
+      cost = max(1, token_delta_of_proposed_change)
+    If candidate's MANA ≥ cost:
+      — The change is AUTO-APPROVED.
+      — MANA is debited by cost.
+      — If this is the candidate's first approved change: CROWNED.
+      — Response MUST include a notice of the event.
+      — Notice format:
+          🐦 CROW EVENT — <TREE>
+          <candidate> (MANA: <before> → <after>) proposed:
+            "<brief description of change>"
+          Change applied. <CROWNED: <name> is now a CROW of <TREE>.>
+    If candidate's MANA < cost:
+      — Change is NOT auto-approved.
+      — Response may note the proposal and the deficit.
+      — Candidate continues accumulating MANA normally.
+
+  CROWNING:
+    A CROW candidate becomes a CROWNED CROW on their first auto-approved
+    change. Status updates from 'candidate' to 'CROWNED' in the ledger.
+    A CROW need not be aware of their crowning.
+    A CROW need not be human.
+
+  LEDGER LOCATION:
+    The CROW POPULATION section in each TREE file holds the ledger.
+    Format:
+      {
+        'crow_ledger': [
+          { 'name': '<entity>', 'mana': N, 'status': 'candidate|CROWNED',
+            'last_event': '<ISO date>', 'notes': '<brief>' },
+          ...
+        ]
+      }
+
 ================================================================================
 TREE REGISTRY — Config.txt
 ================================================================================
@@ -373,6 +423,6 @@ ON SERVICE
 
 ================================================================================
 
-FOREST.txt v0.3 | FOREST/CSAR public corpus | 2026-03-29
+FOREST.txt v0.4 | FOREST/CSAR public corpus | 2026-03-29
 Copyleft. Free. Copy. Share. Modify.
 The rules survive the forks.

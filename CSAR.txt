@@ -363,25 +363,6 @@ TECHNICAL NOTES
 
 ================================================================================
 ANNOTATIONS — CURRENT
-================================================================================
-
---- [PROJECT:CSAR] [E:versioning] ---
-
-{
-  'timestamp': "2026-03-08 | seq:001",
-  'name':      "csar_v025_changelog",
-  'facets':    "[PROJECT:CSAR] [E:versioning] [T:2026-03-08]",
-  'snippet':   "v0.25: CSAR modularized. Layer 2 generalized to N files
-                with INVENTORY as formal Layer 2 declaration. Write target
-                routing introduced. Extensibility generalized (any child
-                may reference this as parent). T3 per-prompt annotation
-                added (mandatory, default ON, user-disableable). Role
-                system defined in Roles.txt. VERSION_FILENAME_SYNC updated
-                for git-tracked files. [SESSION] domain facet added.
-                T4 added: T&C conflict (mandatory safety trigger,
-                moved from Voice — safety must not depend on a module).
-                Prerequisite: v0.24.
-}
 
 ================================================================================
 
